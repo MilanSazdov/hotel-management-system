@@ -46,5 +46,26 @@ public class PriceListController {
 		return allPriceList;
 	}
 	
+	public void setAllPriceList(ArrayList<PriceList> allPriceList) {
+		this.allPriceList = allPriceList;
+	}
+	
+	public void modifyPriceList(int id, PriceList priceList) {
+		for (PriceList p : allPriceList) {
+			if (p.getPriceListId() == id) {
+				p = priceList;
+			}
+		}
+	}
+	
+	public void searchPriceListById(int id) {
+		for (PriceList priceList : allPriceList) {
+			if (priceList.getPriceListId() == id) {
+				System.out.println(priceList.toString());
+			}
+		}
+	}
+	
+	
 	
 }

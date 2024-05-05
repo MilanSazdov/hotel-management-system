@@ -49,5 +49,53 @@ public class ReceptionistController {
 			}
 		}
 	}
+    
+    public void displayFreeRoomTypesByTimePeriod(LocalDate checkInDate, LocalDate checkOutDate) {
+    	System.out.println("Free Room Types:" + checkInDate + " - " + checkOutDate);
+		for (Room room : RoomController.getInstance().getRoomList()) {
+			if (RoomController.getInstance().isRoomFreeByTimePeriod(room, checkInDate, checkOutDate)) {
+				System.out.println(room.getRoomType().toString());
+			}
+		}
+    }
+    
+    public void modifyReceptionist(int id, Receptionist receptionist) {
+    	for (Receptionist r : receptionistList) {
+			if (r.getStaffId() == id) {
+				r = receptionist;
+			}
+    	}
+    }
+    
+	public void searchReceptionistByName(String name) {
+    	for (Receptionist receptionist : receptionistList) {
+    		if (receptionist.getName().equals(name)) {
+    			System.out.println(receptionist.toString());
+    		}
+    	}
+	}
 	
+	public void displayReceptionistById(int id) {
+		for (Receptionist receptionist : receptionistList) {
+			if (receptionist.getStaffId() == id) {
+				System.out.println(receptionist.toString());
+			}
+		}
+	}
+	
+	public void searchReceptionistByUsername(String email) {
+		for (Receptionist receptionist : receptionistList) {
+			if (receptionist.getUsername().equals(email)) {
+				System.out.println(receptionist.toString());
+			}
+		}
+	}
+	
+	public void searchReceptionistByPhoneNumber(String phoneNumber) {
+		for (Receptionist receptionist : receptionistList) {
+			if (receptionist.getPhoneNumber().equals(phoneNumber)) {
+				System.out.println(receptionist.toString());
+			}
+		}
+	}
 }

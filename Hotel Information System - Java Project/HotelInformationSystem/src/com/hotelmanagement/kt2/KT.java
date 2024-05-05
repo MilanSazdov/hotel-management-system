@@ -38,26 +38,38 @@ import com.hotelmanagement.model.RoomType;
 public class KT {
 
 	public static void main(String[] args) {
+		
+		System.out.println("Hotel Management System - Kontrolna tacka 2\n");
+		System.out.println("Autor: Milan Sazdov, SV21-2023\n");
+		System.out.println("Java verzija: ");
+		System.out.println(System.getProperty("java.version"));
+		System.out.println(System.getProperty("java.runtime.version"));
+		
+		System.out.println();
+		
 		LocalDate currentDate = LocalDate.now();
 		
+		//Pravljenje admina i prikazivanje njegovih podataka
 		Admin admin = new Admin("Pera", "Peric", Gender.NOT_SPECIFIED, currentDate, "+381641234567", "pera", "pera123", 3, 50000, ProfessionalQualification.BASIC_SCHOOL);
 		System.out.println(admin.toString());
 		System.out.println();
 		
+		// Pravljenje recepcionera i sobarica
 		Receptionist receptionist1 = new Receptionist("Mika", "Mikic", Gender.MALE, currentDate, "+381641213567", "mika", "mika123", 10, 30000, ProfessionalQualification.BACHELOR_ACADEMIC);
 		Receptionist receptionist2 = new Receptionist("Nikola", "Nikolic", Gender.OTHER, currentDate, "+381621334567", "nidza", "sifra123", 2, 20000, ProfessionalQualification.BASIC_SCHOOL);
 		
 		Maid maid = new Maid("Jana", "Janic", Gender.FEMALE, currentDate, "+3816342424567", "janica", "janica123", 21, 35000, ProfessionalQualification.PRIMARY_SCHOOL_FOURTH_GRADE);
 		
 		MaidController maids = MaidController.getInstance();
-		maids.addMaid(maid);
+		
+		admin.addReceptionist(receptionist1);
+		admin.addReceptionist(receptionist2);
+		admin.addMaid(maid);
 		
 		System.out.printf("************************************\n");
 		System.out.println("Zaposleni: ");
 		
 		ReceptionistController receptionists = ReceptionistController.getInstance();
-		receptionists.addReceptionist(receptionist1);
-		receptionists.addReceptionist(receptionist2);
 		
 		System.out.println("Sobarice: ");
 		admin.displayMaids();
@@ -108,11 +120,23 @@ public class KT {
 	    
 	    RoomController roomController = RoomController.getInstance();
 	    
+	    ArrayList<LocalDate> checkInDates = new ArrayList<>();
+	    ArrayList<LocalDate> checkOutDates = new ArrayList<>();
 	    
-	    Room room1 = new Room(101, roomType1, RoomStatus.FREE, "Soba 101");
-	    Room room2 = new Room(102, roomType2, RoomStatus.FREE, "Soba 102");
-	    Room room3 = new Room(103, roomType3, RoomStatus.FREE, "Soba 103");
-	    Room room4 = new Room(104, roomType2_2, RoomStatus.FREE, "Soba 104");
+	    ArrayList<LocalDate> checkInDates1 = new ArrayList<>();
+	    ArrayList<LocalDate> checkOutDates1 = new ArrayList<>();
+	    
+	    ArrayList<LocalDate> checkInDates2 = new ArrayList<>();
+	    ArrayList<LocalDate> checkOutDates2 = new ArrayList<>();
+	    
+	    ArrayList<LocalDate> checkInDates3 = new ArrayList<>();
+	    ArrayList<LocalDate> checkOutDates3 = new ArrayList<>();
+	    
+	    
+	    Room room1 = new Room(101, roomType1, RoomStatus.FREE, "Soba 101", checkInDates, checkOutDates);
+	    Room room2 = new Room(102, roomType2, RoomStatus.FREE, "Soba 102", checkInDates1, checkOutDates1);
+	    Room room3 = new Room(103, roomType3, RoomStatus.FREE, "Soba 103", checkInDates2, checkOutDates2);
+	    Room room4 = new Room(104, roomType2_2, RoomStatus.FREE, "Soba 104", checkInDates3, checkOutDates3);
 	    
 	    
 	    roomController.addRoom(room1);
@@ -173,6 +197,7 @@ public class KT {
 	    
 	    System.out.println("Cenovnik: ");
 	    System.out.println(priceList1.toString());
+	    System.out.printf("************************************\n");
 	    
 	    System.out.println("Posle promene cene dorucka: ");
 	    
@@ -181,20 +206,17 @@ public class KT {
 	    // ovim se prikazuje da se menja kompletan original a ne lokalna kopija => sto je i bila ideja mojih controller-a u package controller
 	    System.out.println("Cenovnik: ");
 	    System.out.println(priceList1.toString());
+	    System.out.printf("************************************\n");
 	    System.out.println("Cena samo dorucka: ");
 	    additionalServices.displayAdditionalServiceByName("Dorucak");
-	    
+	    System.out.printf("************************************\n");
 	    System.out.println();
 	    // prikazivanje slobodnih tipova soba
-	    System.out.println("Slobodni tipovi soba: od 2024-01-01 do 2024-12-13");
+	    System.out.println("Slobodni tipovi soba: od 2024-08-01 do 2024-08-31");
 	    receptionists.displayFreeRoomTypes();
 	    System.out.println();
-	    
-	    // nema potrebe da se prikazuju sobe koje su dostupne za neki odredjeni datum
-	    // odnosno dovoljno je prikazati samo sobe koje imaju status FREE
-	    // jer ako su neke sobe rezervisane za neki datum onda one nece imati status FREE i nece biti dostupne
-	    // ista stvar vazi i za spremacicu i ciscenje (sobe ce tada imati status CLEANING)
-	    // Zakljucak: dovoljno je samo ispisati sobe/tipove koje imaju status FREE
+	    receptionists.displayFreeRoomTypesByTimePeriod(LocalDate.of(2024, 8, 1), LocalDate.of(2024, 8, 31));
+	    System.out.println();
 	    
 	    LocalDate checkInDate = LocalDate.of(2024, 8, 13);
 	    LocalDate checkOutDate = LocalDate.of(2024, 8, 23);
@@ -209,6 +231,14 @@ public class KT {
 	    
 	    reservationController.addReservation(reservation);
 	    roomController.getRoomList().get(2).setStatus(RoomStatus.OCCUPIED);
+	    roomController.getRoomList().get(2).addCheckInDate(checkInDate);
+	    roomController.getRoomList().get(2).addCheckOutDate(checkOutDate);
+	    
+	    System.out.println(roomController.getRoomList().get(2).toString());
+	    
+	    System.out.println();
+	    roomController.displayFreeRoomTypesByTimePeriod(checkInDate, checkOutDate);
+	    System.out.println();
 	    
 	    System.out.println("Rezervacije: ");
 	    reservationController.displayAllReservations();
@@ -216,9 +246,10 @@ public class KT {
 	    LocalDate checkInDatea = LocalDate.of(2024, 6, 1);
 	    LocalDate checkOutDatea = LocalDate.of(2024, 6, 30);
 	    
-	    // prikazivanje slobodnih tipova soba - sada ima 3 sobe i nema sobe sa id 3
-	    System.out.println("Slobodni tipovi soba: od 2024-08-01 do 2024-08-31");
-	    receptionists.displayFreeRoomTypes();
+	    // prikazivanje slobodnih tipova soba - sada treba da ih ima 4 jer su sve slobodne u tom periodu
+	    
+	    roomController.displayFreeRoomTypesByTimePeriod(checkInDatea, checkOutDatea);
+	    
 	    System.out.println();
 	    
 	    LocalDate checkInDateaa = LocalDate.of(2024, 6, 6);
@@ -229,6 +260,8 @@ public class KT {
 	    
 	    reservationController.addReservation(reservation1);
 	    roomController.getRoomList().get(1).setStatus(RoomStatus.OCCUPIED);
+	    roomController.getRoomList().get(1).addCheckInDate(checkInDateaa);
+	    roomController.getRoomList().get(1).addCheckOutDate(checkOutDateaa);
 	    
 	    //Prikaz svih rezervacija i prikaz rezervacije od Milice Milic
 	    
@@ -239,9 +272,6 @@ public class KT {
 	    receptionist1.displayAllGuestReservations(guest1.getGuestId());
 	    System.out.println();
 	    
-	    System.out.println("Trenutno slobodni tipovi soba: ");
-	    receptionists.displayFreeRoomTypes();
-	    System.out.println();
 	}
 
 }

@@ -76,4 +76,12 @@ public class ReservationController {
 	public ArrayList<Reservation> getAllReservations() {
 		return allReservations;
 	}
+	
+	public void searchReservationById(int id) {
+		for (Reservation reservation : allReservations) {
+			if (reservation.getReservationId() == id) {
+				System.out.println(reservation.toString());
+			}
+		}
+	}
 }

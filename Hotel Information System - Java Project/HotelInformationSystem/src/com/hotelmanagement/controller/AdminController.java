@@ -50,5 +50,36 @@ public class AdminController {
 		this.adminList = adminList;
 	}
 	
+	public void searchAdminByName(String name) {
+        for (Admin admin : adminList) {
+            if (admin.getName().equals(name)) {
+                System.out.println(admin.toString());
+            }
+        }
+    }
+	
+	public void searchAdminByUsername(String email) {
+		for (Admin admin : adminList) {
+			if (admin.getUsername().equals(email)) {
+				System.out.println(admin.toString());
+			}
+		}
+	}
+	
+	public void searchAdminByPhoneNumber(String number) {
+		for (Admin admin : adminList) {
+			if (admin.getPhoneNumber().equals(number)) {
+				System.out.println(admin.toString());
+			}
+		}
+	}
+	
+	public void searchAdminById(int id) {
+		for (Admin admin : adminList) {
+			if (admin.getStaffId() == id) {
+				System.out.println(admin.toString());
+			}
+		}
+	}
 	
 }

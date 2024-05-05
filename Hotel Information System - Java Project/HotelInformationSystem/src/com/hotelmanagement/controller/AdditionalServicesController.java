@@ -58,4 +58,28 @@ public class AdditionalServicesController {
 	public void setAdditionalServicesList(ArrayList<AdditionalServices> additionalServicesList) {
 		this.additionalServicesList = additionalServicesList;
 	}
+	
+	public void searchAdditionalServiceByName(String name) {
+		for (AdditionalServices additionalService : additionalServicesList) {
+			if (additionalService.getServiceName().equals(name)) {
+				System.out.println(additionalService.toString());
+			}
+		}
+	}
+	
+	public void searchAdditionalServiceByPrice(double price) {
+		for (AdditionalServices additionalService : additionalServicesList) {
+			if (additionalService.getPrice() == price) {
+				System.out.println(additionalService.toString());
+			}
+		}
+	}
+	
+	public void searchAdditionalServiceById(int id) {
+		for (AdditionalServices additionalService : additionalServicesList) {
+            if (additionalService.getServiceId() == id) {
+                System.out.println(additionalService.toString());
+            }
+        }
+    }
 }

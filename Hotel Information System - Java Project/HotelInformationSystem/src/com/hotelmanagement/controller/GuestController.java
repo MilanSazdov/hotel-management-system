@@ -42,5 +42,51 @@ public class GuestController {
 		this.guestList = guestList;
 	}
 	
+	public void searchGuestByName(String name) {
+		for (Guest guest : guestList) {
+			if (guest.getName().equals(name)) {
+				System.out.println(guest);
+			}
+		}
+	}
 	
+	public void modifyGuest(int id, Guest guest) {
+		for (Guest g : guestList) {
+			if (g.getGuestId() == id) {
+				g = guest;
+			}
+		}
+	}
+	
+	public void displayGuestById(int id) {
+		for (Guest guest : guestList) {
+			if (guest.getGuestId() == id) {
+				System.out.println(guest);
+			}
+		}
+	}
+	
+	public void searchGuestByUsername(String email) {
+		for (Guest guest : guestList) {
+			if (guest.getUsername().equals(email)) {
+				System.out.println(guest);
+			}
+		}
+	}
+	
+	public void searchGuestByPhoneNumber(String number) {
+		for (Guest guest : guestList) {
+			if (guest.getPhoneNumber().equals(number)) {
+				System.out.println(guest);
+			}
+		}
+	}
+	
+	public void searchGuestById(int id) {
+		for (Guest guest : guestList) {
+			if (guest.getGuestId() == id) {
+				System.out.println(guest);
+			}
+		}
+	}
 }

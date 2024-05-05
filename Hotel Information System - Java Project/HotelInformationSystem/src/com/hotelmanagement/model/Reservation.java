@@ -17,6 +17,7 @@ public class Reservation {
     private int reservationId;
     private int guestId;
     private ArrayList<AdditionalServices> additionalServices;
+    private double totalCost;
     
 	public Reservation(Room room, LocalDate checkInDate, LocalDate checkOutDate, ReservationStatus status, int guestId, ArrayList<AdditionalServices> additionalServices) {
 		this.room = room;
@@ -26,6 +27,28 @@ public class Reservation {
 		this.reservationId = nextReservationId++;
 		this.guestId = guestId;
 		this.additionalServices = additionalServices;
+		calculateTotalCost(room);
+	}
+	
+	public double getTotalCost() {
+		return this.totalCost;
+	}
+	
+	public void setTotalCost(double totalCost) {
+		this.totalCost = totalCost;
+	}
+	
+	public void calculateTotalCost(Room room) {
+		double totalCost = 0;
+		totalCost += room.getRoomType().getPrice();
+		if (this.additionalServices == null) {
+			this.totalCost = totalCost;
+			return;
+		}
+		for (AdditionalServices additionalService : this.additionalServices) {
+			totalCost += additionalService.getPrice();
+		}
+		this.totalCost = totalCost;
 	}
 	
 	public ArrayList<AdditionalServices> getAdditionalServices() {
@@ -85,10 +108,10 @@ public class Reservation {
 		if (this.additionalServices == null) {
 			return "Reservation Id: " + this.reservationId + ", Room: " + this.room + ", Check In Date: "
 					+ this.checkInDate + ", Check Out Date: " + this.checkOutDate + ", Status: " + this.status
-					+ ", Guest Id: " + this.guestId + "\n";
+					+ ", Guest Id: " + this.guestId + " Total price: " + this.totalCost + "\n";
 		}
 		return "Reservation Id: " + this.reservationId + ", Room: " + this.room + ", Check In Date: " + this.checkInDate
-				+ ", Check Out Date: " + this.checkOutDate + ", Status: " + this.status + ", Guest Id: " + this.guestId + ", Additional Services: " + this.additionalServices.toString() + "\n";
+				+ ", Check Out Date: " + this.checkOutDate + ", Status: " + this.status + ", Guest Id: " + this.guestId + ", Additional Services: " + this.additionalServices.toString() + " Total price: " + this.totalCost + "\n";
 	}
 	
 }

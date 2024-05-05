@@ -60,4 +60,28 @@ public class RoomTypeController {
 	public void setRoomTypeList(ArrayList<RoomType> roomTypeList) {
 		this.roomTypeList = roomTypeList;
 	}
+	
+	public void searchRoomTypeById(int id) {
+		for (RoomType roomType : roomTypeList) {
+			if (roomType.getRoomTypeId() == id) {
+				System.out.println(roomType.toString());
+			}
+		}
+	}
+	
+	public void searchRoomTypeByCategory(RoomCategory category) {
+		for (RoomType roomType : roomTypeList) {
+			if (roomType.getCategory().equals(category)) {
+				System.out.println(roomType.toString());
+			}
+		}
+	}
+	
+	public void searchRoomTypeByPrice(double price) {
+		for (RoomType roomType : roomTypeList) {
+			if (roomType.getPrice() == price) {
+				System.out.println(roomType.toString());
+			}
+		}
+	}
 }

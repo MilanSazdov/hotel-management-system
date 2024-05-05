@@ -1,5 +1,6 @@
 package com.hotelmanagement.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.hotelmanagement.model.Room;
@@ -56,4 +57,32 @@ public class RoomController {
 		}
 	}
 	
+	public boolean isRoomFreeByTimePeriod(Room room, LocalDate checkInDate, LocalDate checkOutDate) {
+        return room.isRoomFreeByTimePeriod(checkInDate, checkOutDate);
+    }
+	
+	public void displayFreeRoomTypesByTimePeriod(LocalDate checkInDate, LocalDate checkOutDate) {
+        System.out.println("Free Room Types from " + checkInDate + " to " + checkOutDate + ":");
+        for (Room room : roomList) {
+            if (isRoomFreeByTimePeriod(room, checkInDate, checkOutDate)) {
+                System.out.println(room.getRoomType().toString());
+            }
+        }
+    }
+	
+	public void displayRoomById(int id) {
+		for (Room room : roomList) {
+			if (room.getRoomId() == id) {
+				System.out.println(room.toString());
+			}
+		}
+	}
+	
+	public void searchRoomById(int id) {
+		for (Room room : roomList) {
+			if (room.getRoomId() == id) {
+				System.out.println(room.toString());
+			}
+		}
+	}
 }
