@@ -6,14 +6,26 @@ import java.util.ArrayList;
 import com.hotelmanagement.model.Receptionist;
 import com.hotelmanagement.model.Room;
 import com.hotelmanagement.model.RoomStatus;
+import com.hotelmanagement.model.RoomType;
+import com.hotelmanagement.model.Receptionist;
+import com.hotelmanagement.model.Gender;
+import com.hotelmanagement.model.ProfessionalQualification;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 
 public class ReceptionistController {
 	
 	private static ReceptionistController instance;
     private ArrayList<Receptionist> receptionistList;
-
+    
     private ReceptionistController() {
         receptionistList = new ArrayList<>();
+        loadReceptionistsFromFile();
     }
 
     public static synchronized ReceptionistController getInstance() {
@@ -22,6 +34,58 @@ public class ReceptionistController {
         }
         return instance;
     }
+    
+    public void loadReceptionistsFromFile() {
+        receptionistList.clear();
+        String path = "src/com/hotelmanagement/data/receptionists.csv";
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(path))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(",");
+                Receptionist receptionist = new Receptionist(
+                    Integer.parseInt(values[0]), // ID from the file
+                    values[1], // Name
+                    values[2], // Last Name
+                    Gender.valueOf(values[3]), // Gender
+                    LocalDate.parse(values[4]), // Birthdate
+                    values[5], // Phone Number
+                    values[6], // Username
+                    values[7], // Password
+                    Integer.parseInt(values[8]), // Working Experience
+                    Double.parseDouble(values[9]), // Salary
+                    ProfessionalQualification.valueOf(values[10]) // Qualification
+                );
+                receptionistList.add(receptionist);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void saveReceptionistsToFile() {
+        String path = "src/com/hotelmanagement/data/receptionists.csv";
+        try (BufferedWriter bw = Files.newBufferedWriter(Paths.get(path))) {
+            for (Receptionist receptionist : receptionistList) {
+                bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%d,%f,%s\n",
+                    receptionist.getReceptionistId(),
+                    receptionist.getName(),
+                    receptionist.getLastName(),
+                    receptionist.getGender(),
+                    receptionist.getBirthDate(),
+                    receptionist.getPhoneNumber(),
+                    receptionist.getUsername(),
+                    receptionist.getPassword(),
+                    receptionist.getWorkingExperience(),
+                    receptionist.getSalary(),
+                    receptionist.getProfessionalQualification()
+                ));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void addReceptionist(Receptionist receptionist) {
         receptionistList.add(receptionist);
@@ -61,7 +125,7 @@ public class ReceptionistController {
     
     public void modifyReceptionist(int id, Receptionist receptionist) {
     	for (Receptionist r : receptionistList) {
-			if (r.getStaffId() == id) {
+			if (r.getReceptionistId() == id) {
 				r = receptionist;
 			}
     	}
@@ -77,7 +141,7 @@ public class ReceptionistController {
 	
 	public void displayReceptionistById(int id) {
 		for (Receptionist receptionist : receptionistList) {
-			if (receptionist.getStaffId() == id) {
+			if (receptionist.getReceptionistId() == id) {
 				System.out.println(receptionist.toString());
 			}
 		}
@@ -98,4 +162,17 @@ public class ReceptionistController {
 			}
 		}
 	}
+	
+	public boolean checkUserExists(String username, String password) {
+        for (Receptionist receptionist : receptionistList) {
+            if (receptionist.getUsername().equals(username) && receptionist.getPassword().equals(password)) {
+                return true;
+            }
+        }
+        return false;
+    }
+	
+	public ArrayList<Receptionist> getAllReceptionists() {
+        return new ArrayList<>(receptionistList); // Return a copy of the list to avoid external modifications
+    }
 }

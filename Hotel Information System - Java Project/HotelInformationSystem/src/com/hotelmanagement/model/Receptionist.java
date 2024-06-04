@@ -1,6 +1,7 @@
 package com.hotelmanagement.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 
 import com.hotelmanagement.controller.GuestController;
@@ -9,12 +10,30 @@ import com.hotelmanagement.controller.RoomController;
 
 public class Receptionist extends Staff{
 	
+	private static int nextId = 0;
+	private int receptionistId;
+	
+	public Receptionist(int id, String name, String lastName, Gender gender, LocalDate birthDate, String phoneNumber, String username, String password, int workingExperience, double salary, ProfessionalQualification professionalQualification) {
+        super(name, lastName, gender, birthDate, phoneNumber, username, password, workingExperience, salary, professionalQualification);
+        this.receptionistId = id;
+    }
+	
 	public Receptionist(String name, String lastName, Gender gender, LocalDate birthDate, String phoneNumber, String username, String password, int workingExperience, double salary, ProfessionalQualification professionalQualification) {
         super(name, lastName, gender, birthDate, phoneNumber, username, password, workingExperience, salary, professionalQualification);
-    }
+        this.receptionistId = nextId++;
+	}
 	
 	public Receptionist() {
 		super();
+		this.receptionistId = nextId++;
+	}
+	
+	public int getReceptionistId() {
+		return this.receptionistId;
+	}
+	
+	public void setReceptionistId(int id) {
+		this.receptionistId = id;
 	}
 	
 	public void addGuest(Guest guest) {
@@ -40,6 +59,22 @@ public class Receptionist extends Staff{
 				System.out.println(reservation.toString());
 			}
 		}
+	}
+	
+	public ArrayList<Room> getFreeRoomsByType(RoomType type, LocalDate checkInDate, LocalDate checkOutDate) {
+        return RoomController.getInstance().getFreeRoomsByTypeAndPeriod(type, checkInDate, checkOutDate);
+    }
+	
+	public void displayAvailableRoomsForType(RoomType type, LocalDate start, LocalDate end) {
+	    ArrayList<Room> availableRooms = getFreeRoomsByType(type, start, end);
+	    if (availableRooms.isEmpty()) {
+	        System.out.println("No available rooms for the specified type and date range.");
+	    } else {
+	        System.out.println("Available rooms:");
+	        for (Room room : availableRooms) {
+	            System.out.println(room);
+	        }
+	    }
 	}
 	
 	@Override

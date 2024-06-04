@@ -13,6 +13,12 @@ public class AdditionalServices {
 		this.serviceId = nextServiceId++;
 	}
 	
+	public AdditionalServices(int id, String serviceName, double price) {
+		this.serviceName = serviceName;
+		this.price = price;
+		this.serviceId = id;
+	}
+	
 	public int getServiceId() {
         return this.serviceId;
 	}

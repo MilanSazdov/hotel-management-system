@@ -2,6 +2,8 @@ package com.hotelmanagement.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.hotelmanagement.controller.AdditionalServicesController;
 import com.hotelmanagement.controller.RoomTypeController;
@@ -12,20 +14,33 @@ public class PriceList {
     private LocalDate validTo;
     static private int nextPriceListId = 1;
     private int priceListId;
-
+    private Map<RoomType, Double> roomTypePrices;
+    private Map<AdditionalServices, Double> additionalServicePrices;
+    
+    
     public PriceList(LocalDate validFrom, LocalDate validTo) {
         this.validFrom = validFrom;
         this.validTo = validTo;
         this.priceListId = nextPriceListId++;
+        this.roomTypePrices = new HashMap<>();
+        this.additionalServicePrices = new HashMap<>();
     }
     
-	public void setPriceForRoomType(int id, double price) {
-		RoomTypeController.getInstance().modifyRoomTypePrice(id, price);
-	}
-	
-	public void setPriceForAdditionalService(int id, double price) {
-		AdditionalServicesController.getInstance().modifyAdditionalSevicePrice(id, price);
-	}
+    public void setPriceForRoomType(RoomType roomType, double price) {
+        roomTypePrices.put(roomType, price);
+    }
+
+    public double getPriceForRoomType(RoomType roomType) {
+        return roomTypePrices.getOrDefault(roomType, 0.0);
+    }
+
+    public void setPriceForAdditionalService(AdditionalServices service, double price) {
+        additionalServicePrices.put(service, price);
+    }
+
+    public double getPriceForAdditionalService(AdditionalServices service) {
+        return additionalServicePrices.getOrDefault(service, 0.0);
+    }
     
 	public void addRoomType(RoomType roomType) {
 		RoomTypeController.getInstance().addRoomType(roomType);
@@ -95,11 +110,29 @@ public class PriceList {
         this.validTo = validTo;
     }
     
-    
-    @Override
-    public String toString() {
-        return "PriceList valid from " + validFrom + " to " + validTo +
-               "\nRoom Types: " + RoomTypeController.getInstance().getRoomTypeList().toString() +
-               "\nAdditional Services: " + AdditionalServicesController.getInstance().getAdditionalServicesList().toString();
+    public boolean isValidForDate(LocalDate date) {
+        return (date.isEqual(validFrom) || date.isAfter(validFrom)) &&
+               (date.isEqual(validTo) || date.isBefore(validTo));
     }
+
+	@Override
+	public String toString() {
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("PriceList ID: ").append(priceListId)
+	      .append("\nValid from: ").append(validFrom)
+	      .append("\nValid to: ").append(validTo)
+	      .append("\nRoom Types and Prices: ");
+	
+	    for (Map.Entry<RoomType, Double> entry : roomTypePrices.entrySet()) {
+	        sb.append("\n - ").append(entry.getKey().toString()).append(": ").append(entry.getValue());
+	    }
+	
+	    sb.append("\nAdditional Services and Prices: ");
+	    for (Map.Entry<AdditionalServices, Double> entry : additionalServicePrices.entrySet()) {
+	        sb.append("\n - ").append(entry.getKey().toString()).append(": ").append(entry.getValue());
+	    }
+	
+	    return sb.toString();
+	}
+
 }

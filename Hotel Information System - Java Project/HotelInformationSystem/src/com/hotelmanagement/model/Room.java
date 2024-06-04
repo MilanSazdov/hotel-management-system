@@ -105,6 +105,23 @@ public class Room {
         return true; // Soba je slobodna u datom periodu
     }
 	
+	public String toCSVString() {
+	    return roomNumber + "," + roomType.getRoomTypeId() + "," + status + "," + roomDescription + "," 
+	           + formatDates(checkInDates) + "," + formatDates(checkOutDates);
+	}
+
+	// Helper method to format dates as a semicolon-separated string
+	private String formatDates(ArrayList<LocalDate> dates) {
+	    StringBuilder sb = new StringBuilder();
+	    for (LocalDate date : dates) {
+	        if (sb.length() > 0) {
+	            sb.append(";");
+	        }
+	        sb.append(date.toString());
+	    }
+	    return sb.toString();
+	}
+	
 	@Override
 	public String toString() {
 		return "Room Id: " + this.roomId + " Room Number: " + this.roomNumber + ", Room Type: " + this.roomType + ", Room Status: " + this.status

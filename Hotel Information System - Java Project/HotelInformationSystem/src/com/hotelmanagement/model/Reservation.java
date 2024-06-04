@@ -1,8 +1,10 @@
 package com.hotelmanagement.model;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
+import com.hotelmanagement.controller.PriceListController;
 import com.hotelmanagement.controller.ReservationController;
 import com.hotelmanagement.controller.RoomController;
 import com.hotelmanagement.controller.RoomTypeController;
@@ -27,8 +29,44 @@ public class Reservation {
 		this.reservationId = nextReservationId++;
 		this.guestId = guestId;
 		this.additionalServices = additionalServices;
-		calculateTotalCost(room);
+		calculateTotalCost();
 	}
+	
+	public void applyPriceList(PriceList priceList) {
+	    for (AdditionalServices service : this.additionalServices) {
+	        Double newPrice = priceList.getPriceForAdditionalService(service);
+	        if (newPrice != null) {
+	            service.setPrice(newPrice);
+	        }
+	    }
+	}
+	
+	public void calculateTotalCost() {
+	    // Uključivanje dana odlaska u izračunavanje broja dana boravka
+	    long totalDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate.plusDays(1));  // Dodajemo 1 dan da uključimo dan odlaska
+
+	    LocalDate tempDate = checkInDate;
+	    double totalCost = 0.0;
+
+	    // Računanje troškova za svaki dan boravka
+	    while (!tempDate.isAfter(checkOutDate)) {
+	        PriceList applicablePriceList = PriceListController.getInstance().getApplicablePriceListForDate(tempDate);
+	        if (applicablePriceList != null) {
+	            double dailyRoomRate = applicablePriceList.getPriceForRoomType(room.getRoomType());
+	            totalCost += dailyRoomRate;  // Dodajemo cenu sobe za svaki dan
+
+	            // Dodavanje cene svake dodatne usluge za svaki dan boravka
+	            for (AdditionalServices service : additionalServices) {
+	                totalCost += applicablePriceList.getPriceForAdditionalService(service);
+	            }
+	        }
+	        tempDate = tempDate.plusDays(1);  // Prelazimo na sledeći dan
+	    }
+
+	    this.totalCost = totalCost;
+	}
+
+
 	
 	public double getTotalCost() {
 		return this.totalCost;
@@ -38,18 +76,6 @@ public class Reservation {
 		this.totalCost = totalCost;
 	}
 	
-	public void calculateTotalCost(Room room) {
-		double totalCost = 0;
-		totalCost += room.getRoomType().getPrice();
-		if (this.additionalServices == null) {
-			this.totalCost = totalCost;
-			return;
-		}
-		for (AdditionalServices additionalService : this.additionalServices) {
-			totalCost += additionalService.getPrice();
-		}
-		this.totalCost = totalCost;
-	}
 	
 	public ArrayList<AdditionalServices> getAdditionalServices() {
 		return this.additionalServices;

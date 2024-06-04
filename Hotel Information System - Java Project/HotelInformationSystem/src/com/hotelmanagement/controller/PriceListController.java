@@ -1,5 +1,6 @@
 package com.hotelmanagement.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.hotelmanagement.model.*;
@@ -66,6 +67,13 @@ public class PriceListController {
 		}
 	}
 	
-	
+	public PriceList getApplicablePriceListForDate(LocalDate date) {
+	    for (PriceList priceList : allPriceList) {
+	        if (priceList.getValidFrom().compareTo(date) <= 0 && priceList.getValidTo().compareTo(date) >= 0) {
+	            return priceList;
+	        }
+	    }
+	    return null;
+	}
 	
 }

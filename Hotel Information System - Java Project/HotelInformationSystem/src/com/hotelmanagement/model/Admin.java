@@ -12,12 +12,32 @@ import com.hotelmanagement.controller.ReceptionistController;
 
 public class Admin extends Staff {
 	
-	public Admin(String name, String lastName, Gender gender, LocalDate birthDate, String phoneNumber, String username, String password, int workingExperience, double salary, ProfessionalQualification professionalQualification) {
+	private static int nextId = 0;
+	private int adminId;
+	
+	public Admin(int id, String name, String lastName, Gender gender, LocalDate birthDate, String phoneNumber, String username, String password, int workingExperience, double salary, ProfessionalQualification professionalQualification) {
         super(name, lastName, gender, birthDate, phoneNumber, username, password, workingExperience, salary, professionalQualification);
-    }
+        this.adminId = id;
+	}
 	
 	public Admin() {
 		super();
+		this.adminId = nextId++;
+	}
+	
+	// Constructor without ID for manual assignment (if ever needed)
+    public Admin(String name, String lastName, Gender gender, LocalDate birthDate, String phoneNumber, String username, String password, int workingExperience, double salary, ProfessionalQualification professionalQualification) {
+        super(name, lastName, gender, birthDate, phoneNumber, username, password, workingExperience, salary, professionalQualification);
+        this.adminId = nextId++;
+    }
+	
+	
+	public int getAdminId() {
+		return this.adminId;
+	}
+	
+	public void setAdminId(int id) {
+		this.adminId = id;
 	}
 	
 	public void addMaid(Maid maid) {
@@ -61,7 +81,6 @@ public class Admin extends Staff {
 	}
 	
 	
-	
 	public void displayAllAdditionalServices() {
 		AdditionalServicesController.getInstance().displayAllAdditionalServices();
 	}
@@ -74,7 +93,7 @@ public class Admin extends Staff {
 	
 	@Override
 	public String toString() {
-	    return "Admin{" + super.toString() + "}";
+	    return "Admin{" + "id: "+ this.adminId + super.toString() + "}";
 	}
 
 }

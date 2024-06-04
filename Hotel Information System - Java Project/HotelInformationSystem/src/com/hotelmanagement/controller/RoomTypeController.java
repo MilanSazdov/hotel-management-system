@@ -1,5 +1,10 @@
 package com.hotelmanagement.controller;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.hotelmanagement.model.RoomCategory;
@@ -61,12 +66,13 @@ public class RoomTypeController {
 		this.roomTypeList = roomTypeList;
 	}
 	
-	public void searchRoomTypeById(int id) {
+	public RoomType searchRoomTypeById(int id) {
 		for (RoomType roomType : roomTypeList) {
 			if (roomType.getRoomTypeId() == id) {
-				System.out.println(roomType.toString());
+				return roomType;
 			}
 		}
+		return null;
 	}
 	
 	public void searchRoomTypeByCategory(RoomCategory category) {
@@ -84,4 +90,41 @@ public class RoomTypeController {
 			}
 		}
 	}
+	
+	public void loadRoomTypesFromFile() {
+        String path = "src/com/hotelmanagement/data/roomtypes.csv";
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(",");
+                int roomTypeId = Integer.parseInt(values[0]);
+                int numberOfBeds = Integer.parseInt(values[1]);
+                RoomCategory category = RoomCategory.valueOf(values[2]);
+                double price = Double.parseDouble(values[3]);
+
+                RoomType roomType = new RoomType(roomTypeId, numberOfBeds, category, price);
+                roomTypeList.add(roomType);
+            }
+            System.out.println("Room types loaded successfully.");
+        } catch (IOException e) {
+            System.out.println("Error reading from file: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Error parsing number from file: " + e.getMessage());
+        }
+    }
+
+	
+	public void saveRoomTypesToFile() {
+        String path = "src/com/hotelmanagement/data/roomtypes.csv";
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
+            for (RoomType roomType : roomTypeList) {
+                bw.write(roomType.toCSVString());
+                bw.newLine();
+            }
+            System.out.println("Room types saved successfully.");
+        } catch (IOException e) {
+            System.out.println("Error writing to file: " + e.getMessage());
+        }
+    }
+
 }

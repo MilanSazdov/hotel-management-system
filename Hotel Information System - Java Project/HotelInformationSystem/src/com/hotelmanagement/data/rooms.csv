@@ -1,0 +1,14 @@
+1,1,FREE,Single Room with One Bed,2024-06-01;2024-06-15,2024-06-10;2024-06-20
+2,2,FREE,Double Room with Two Single Beds,2024-06-01;2024-06-05,2024-06-03;2024-06-07
+3,3,FREE,Triple Room with One Double and One Single Bed,, 
+4,4,FREE,Triple Room with Three Single Beds,2024-06-01;2024-06-10,2024-06-05;2024-06-15
+5,5,FREE,Quad Room with Two Double Beds,,
+6,6,FREE,Quad Room with Three Single Beds and One Extra Bed,2024-06-01;2024-06-12,2024-06-06;2024-06-17
+7,7,FREE,Room for Five with Two Double Beds and One Single Bed,,
+8,1,FREE,Single Room with One Bed,2024-06-15;2024-06-30,2024-06-20;2024-07-05
+9,2,OCCUPIED,Double Room with Two Single Beds,2024-06-05;2024-06-15,2024-06-10;2024-06-20
+10,3,FREE,Triple Room with One Double and One Single Bed,,
+11,4,OCCUPIED,Triple Room with Three Single Beds,2024-06-10;2024-06-20,2024-06-15;2024-06-25
+12,5,FREE,Quad Room with Two Double Beds,,
+13,6,OCCUPIED,Quad Room with Three Single Beds and One Extra Bed,2024-06-12;2024-06-22,2024-06-17;2024-06-27
+14,7,FREE,Room for Five with Two Double Beds and One Single Bed,,

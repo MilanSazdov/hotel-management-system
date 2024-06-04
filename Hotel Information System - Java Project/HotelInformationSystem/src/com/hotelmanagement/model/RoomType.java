@@ -8,11 +8,18 @@ public class RoomType {
 	private static int nextRoomTypeId = 1;
 	private int roomTypeId;
 	
-	public RoomType(int numberOfBeds, RoomCategory category) {
+	public RoomType(int numberOfBeds, RoomCategory category, double price) {
 		this.numberOfBeds = numberOfBeds;
 		this.category = category;
-		this.price = category.getPrice();
+		this.price = price;
 		this.roomTypeId = nextRoomTypeId++;
+	}
+	
+	public RoomType(int id, int numberOfBeds, RoomCategory category, double price) {
+		this.numberOfBeds = numberOfBeds;
+		this.category = category;
+		this.price = price;
+		this.roomTypeId = id;
 	}
 	
 	public int getRoomTypeId() {
@@ -42,6 +49,10 @@ public class RoomType {
 	public void setPrice(double price) {
 		this.price = price;
 	}
+	
+	public String toCSVString() {
+        return roomTypeId + "," + numberOfBeds + "," + category.name() + "," + price;
+    }
 	
 	@Override
 	public String toString() {
