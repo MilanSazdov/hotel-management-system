@@ -55,7 +55,13 @@ public class Reservation {
         this.totalCost = totalCost;
     }
 
-
+	public RoomType getRoomType() {
+		return this.roomType;
+	}
+	
+	public void setRoomType(RoomType roomType) {
+		this.roomType = roomType;
+	}
 	
 	public double getTotalCost() {
 		return this.totalCost;

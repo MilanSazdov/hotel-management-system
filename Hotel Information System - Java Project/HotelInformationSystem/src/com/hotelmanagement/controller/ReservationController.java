@@ -135,4 +135,27 @@ public class ReservationController {
 	}
 
 
+
+	public ArrayList<Reservation> getReservationsByGuestAndStatus(int guestId, ReservationStatus status) {
+	    ArrayList<Reservation> guestReservations = new ArrayList<>();
+	    for (Reservation reservation : allReservations) {
+	        if (reservation.getGuestId() == guestId && reservation.getStatus() == status) {
+	            guestReservations.add(reservation);
+	        }
+	    }
+	    return guestReservations;
+	}
+
+	public void updateReservation(Reservation reservation) {
+	    for (int i = 0; i < allReservations.size(); i++) {
+	        if (allReservations.get(i).getReservationId() == reservation.getReservationId()) {
+	            allReservations.set(i, reservation);
+	            System.out.println("Reservation updated in system.");
+	            reservation.calculateTotalCost();
+	            break;
+	        }
+	    }
+	}
+
+
 }

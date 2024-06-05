@@ -14,12 +14,13 @@ public class Room {
 	private ArrayList<LocalDate> checkInDates;
 	private ArrayList<LocalDate> checkOutDates;
 	
-	public Room(int roomNumber, RoomType roomType, RoomStatus status, String roomDescription, ArrayList<LocalDate> checkInDates, ArrayList<LocalDate> checkOutDates) {
+	public Room(int id, int roomNumber, RoomType roomType, RoomStatus status, String roomDescription, ArrayList<LocalDate> checkInDates, ArrayList<LocalDate> checkOutDates) {
 		this.roomNumber = roomNumber;
 		this.roomType = roomType;
 		this.status = status;
 		this.roomDescription = roomDescription;
-		this.roomId = nextRoomId++;
+		this.roomId = id++;
+		this.nextRoomId = id;
 		this.checkInDates = checkInDates;
 		this.checkOutDates = checkOutDates;
 	}

@@ -106,31 +106,38 @@ public class RoomController {
     }
 	
 	public void loadRoomsFromFile() {
-        String path = "src/com/hotelmanagement/data/rooms.csv";
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                // System.out.println("Reading line: " + line); // Debug print
-                String[] values = line.split(",");
-                int roomNumber = Integer.parseInt(values[0]);
-                int roomTypeId = Integer.parseInt(values[1]);
-                RoomStatus status = RoomStatus.valueOf(values[2]);
-                String roomDescription = values[3];
-                ArrayList<LocalDate> checkInDates = parseDates(values.length > 4 ? values[4] : "");
-                ArrayList<LocalDate> checkOutDates = parseDates(values.length > 5 ? values[5] : "");
+	    String path = "src/com/hotelmanagement/data/rooms.csv";
+	    try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+	        String line;
+	        while ((line = br.readLine()) != null) {
+	            String[] values = line.split(",");
+	            // Parsing the CSV values according to the new order
+	            int roomId = Integer.parseInt(values[0]); // Room ID is now at position 0
+	            int roomNumber = Integer.parseInt(values[1]); // Room number is now at position 1
+	            int roomTypeId = Integer.parseInt(values[2]); // Room type ID is now at position 2
+	            RoomStatus status = RoomStatus.valueOf(values[3]); // Status is now at position 3
+	            String roomDescription = values[4]; // Room description is now at position 4
+	            ArrayList<LocalDate> checkInDates = parseDates(values.length > 5 ? values[5] : ""); // Check-in dates are now at position 5
+	            ArrayList<LocalDate> checkOutDates = parseDates(values.length > 6 ? values[6] : ""); // Check-out dates are now at position 6
 
-                RoomType roomType = RoomTypeController.getInstance().searchRoomTypeById(roomTypeId);
-                Room room = new Room(roomNumber, roomType, status, roomDescription, checkInDates, checkOutDates);
-                roomList.add(room);
-               // System.out.println("Loaded room: " + room); // Debug print
-            }
-            System.out.println("Rooms loaded successfully.");
-        } catch (IOException e) {
-            System.out.println("Error reading from file: " + e.getMessage());
-        } catch (NumberFormatException e) {
-            System.out.println("Error parsing number from file: " + e.getMessage());
-        }
-    }
+	            // Fetch the RoomType object using the Room Type ID
+	            RoomType roomType = RoomTypeController.getInstance().searchRoomTypeById(roomTypeId);
+	            if (roomType == null) {
+	                System.out.println("Room type not found for Room Type ID: " + roomTypeId);
+	                continue; // Skip this room if room type is not found
+	            }
+
+	            Room room = new Room(roomId, roomNumber, roomType, status, roomDescription, checkInDates, checkOutDates);
+	            roomList.add(room);
+	        }
+	        System.out.println("Rooms loaded successfully.");
+	    } catch (IOException e) {
+	        System.out.println("Error reading from file: " + e.getMessage());
+	    } catch (NumberFormatException e) {
+	        System.out.println("Error parsing number from file: " + e.getMessage());
+	    }
+	}
+
 
     // Helper method to parse dates from a comma-separated string
     private ArrayList<LocalDate> parseDates(String dateString) {
@@ -157,4 +164,20 @@ public class RoomController {
             System.out.println("Error writing to file: " + e.getMessage());
         }
     }
+    
+	public Room findRoomById(int id) {
+		for (Room room : roomList) {
+			if (room.getRoomId() == id) {
+				return room;
+			}
+		}
+		return null;
+	}
+	
+	// Method to retrieve all rooms
+    public ArrayList<Room> getAllRooms() {
+        return new ArrayList<>(roomList); // Return a copy of the rooms list to prevent external modifications
+    }
+
+
 }
