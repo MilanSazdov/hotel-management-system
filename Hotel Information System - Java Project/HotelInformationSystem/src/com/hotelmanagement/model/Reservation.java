@@ -12,6 +12,7 @@ import com.hotelmanagement.controller.RoomTypeController;
 public class Reservation {
 	
 	private Room room;
+	private RoomType roomType;
 	private LocalDate checkInDate;
 	private LocalDate checkOutDate;
     private ReservationStatus status;
@@ -21,8 +22,9 @@ public class Reservation {
     private ArrayList<AdditionalServices> additionalServices;
     private double totalCost;
     
-	public Reservation(Room room, LocalDate checkInDate, LocalDate checkOutDate, ReservationStatus status, int guestId, ArrayList<AdditionalServices> additionalServices) {
+	public Reservation(Room room, RoomType roomType, LocalDate checkInDate, LocalDate checkOutDate, ReservationStatus status, int guestId, ArrayList<AdditionalServices> additionalServices) {
 		this.room = room;
+		this.roomType = roomType;
 		this.checkInDate = checkInDate;
 		this.checkOutDate = checkOutDate;
 		this.status = status;
@@ -31,40 +33,27 @@ public class Reservation {
 		this.additionalServices = additionalServices;
 		calculateTotalCost();
 	}
-	
-	public void applyPriceList(PriceList priceList) {
-	    for (AdditionalServices service : this.additionalServices) {
-	        Double newPrice = priceList.getPriceForAdditionalService(service);
-	        if (newPrice != null) {
-	            service.setPrice(newPrice);
-	        }
-	    }
-	}
-	
-	public void calculateTotalCost() {
-	    // Uključivanje dana odlaska u izračunavanje broja dana boravka
-	    long totalDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate.plusDays(1));  // Dodajemo 1 dan da uključimo dan odlaska
+    
+    public void calculateTotalCost() {
+        long totalDays = ChronoUnit.DAYS.between(checkInDate, checkOutDate.plusDays(1));  // Including the checkout day
+        LocalDate tempDate = checkInDate;
+        double totalCost = 0.0;
 
-	    LocalDate tempDate = checkInDate;
-	    double totalCost = 0.0;
+        while (!tempDate.isAfter(checkOutDate)) {
+            PriceList applicablePriceList = PriceListController.getInstance().getApplicablePriceListForDate(tempDate);
+            if (applicablePriceList != null) {
+                double dailyRoomRate = applicablePriceList.getPriceForRoomTypeId(roomType.getRoomTypeId());
+                totalCost += dailyRoomRate;
 
-	    // Računanje troškova za svaki dan boravka
-	    while (!tempDate.isAfter(checkOutDate)) {
-	        PriceList applicablePriceList = PriceListController.getInstance().getApplicablePriceListForDate(tempDate);
-	        if (applicablePriceList != null) {
-	            double dailyRoomRate = applicablePriceList.getPriceForRoomType(room.getRoomType());
-	            totalCost += dailyRoomRate;  // Dodajemo cenu sobe za svaki dan
+                for (AdditionalServices service : additionalServices) {
+                    totalCost += applicablePriceList.getPriceForAdditionalServiceId(service.getServiceId());
+                }
+            }
+            tempDate = tempDate.plusDays(1);
+        }
 
-	            // Dodavanje cene svake dodatne usluge za svaki dan boravka
-	            for (AdditionalServices service : additionalServices) {
-	                totalCost += applicablePriceList.getPriceForAdditionalService(service);
-	            }
-	        }
-	        tempDate = tempDate.plusDays(1);  // Prelazimo na sledeći dan
-	    }
-
-	    this.totalCost = totalCost;
-	}
+        this.totalCost = totalCost;
+    }
 
 
 	
@@ -130,14 +119,10 @@ public class Reservation {
 	}
 	
 	@Override
-	public String toString() {
-		if (this.additionalServices == null) {
-			return "Reservation Id: " + this.reservationId + ", Room: " + this.room + ", Check In Date: "
-					+ this.checkInDate + ", Check Out Date: " + this.checkOutDate + ", Status: " + this.status
-					+ ", Guest Id: " + this.guestId + " Total price: " + this.totalCost + "\n";
-		}
-		return "Reservation Id: " + this.reservationId + ", Room: " + this.room + ", Check In Date: " + this.checkInDate
-				+ ", Check Out Date: " + this.checkOutDate + ", Status: " + this.status + ", Guest Id: " + this.guestId + ", Additional Services: " + this.additionalServices.toString() + " Total price: " + this.totalCost + "\n";
-	}
+    public String toString() {
+        String servicesInfo = (additionalServices != null) ? additionalServices.toString() : "No additional services";
+        return String.format("Reservation Id: %d, Room: %s, Check In Date: %s, Check Out Date: %s, Status: %s, Guest Id: %d, Additional Services: %s, Total price: %.2f\n",
+                             reservationId, room, checkInDate, checkOutDate, status, guestId, servicesInfo, totalCost);
+    }
 	
 }

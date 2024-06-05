@@ -31,6 +31,13 @@ public class Guest extends User {
         this.guestId = id;
     }
 	
+	public Guest() {
+		super();
+		this.reservations = new ArrayList<>();
+		this.reservationIds = new ArrayList<>();
+		this.guestId = nextGuestId++;
+	}
+	
 	public ArrayList<Integer> getReservationIds() {
         return reservationIds;
     }
@@ -66,14 +73,23 @@ public class Guest extends User {
     public ArrayList<Reservation> getReservations() {
         return this.reservations;
     }
-    /*
-	public void requestReservation(RoomType roomType, Date checkIn, Date checkOut) {
-		Reservation newReservation = new Reservation();
-		reservations.add(newReservation);
-	}*/
-	
-	// Gost može da napravi zahtev za rezervaciju određenog tipa sobe za datume koje sam
-	// odabere.
+    
+    public void requestReservation(Reservation reservation) {
+        if (this.reservations == null) {
+            this.reservations = new ArrayList<>();
+        }
+        this.reservations.add(reservation);
+        System.out.println("Reservation added: " + reservation);
+    }
+    
+    public void removeReservation(Reservation reservation) {
+        if (reservations != null) {
+            reservations.remove(reservation);
+            System.out.println("Reservation " + reservation.getReservationId() + " has been cancelled and removed.");
+        }
+    }
+
+
     
 
 	@Override

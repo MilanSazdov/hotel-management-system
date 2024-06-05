@@ -6,9 +6,11 @@ import com.hotelmanagement.model.Admin;
 import com.hotelmanagement.model.Guest;
 import com.hotelmanagement.model.Maid;
 import com.hotelmanagement.model.Receptionist;
+import com.hotelmanagement.model.User;
 
 public class DataController {
 	private static DataController instance = null;
+	private int currentUserId;
 
 	private DataController() {
 	}
@@ -19,6 +21,14 @@ public class DataController {
 		}
 		return instance;
 	}
+	
+	public void setCurrentUserId(int userId) {
+		this.currentUserId = userId;
+	}
+	
+	public int getCurrentUserId() {
+		return this.currentUserId;
+	}
 
 	public void loadData() {
 		AdminController.getInstance().loadAdminsFromFile();
@@ -27,6 +37,12 @@ public class DataController {
         GuestController.getInstance().loadGuestsFromFile();
         RoomTypeController.getInstance().loadRoomTypesFromFile();
         RoomController.getInstance().loadRoomsFromFile();
+        AdditionalServicesController.getInstance().loadAdditionalServicesFromFile();
+        PriceListController.getInstance().loadPriceListsFromFile();
+	}
+	
+	public void printPriceLists() {
+		PriceListController.getInstance().displayAllPriceList();
 	}
 	
 	// Method to print all users, does not take any parameters
@@ -94,17 +110,22 @@ public class DataController {
 	
 	public String authenticateUser(String username, String password) {
         if (AdminController.getInstance().checkUserExists(username, password)) {
+        	this.currentUserId = AdminController.getInstance().getAdminByUsername(username).getAdminId();
             return "Admin";
         }
         if (MaidController.getInstance().checkUserExists(username, password)) {
+        	this.currentUserId = MaidController.getInstance().getMaidByUsername(username).getMaidId();
             return "Maid";
         }
         if (ReceptionistController.getInstance().checkUserExists(username, password)) {
+        	this.currentUserId = ReceptionistController.getInstance().getReceptionistByUsername(username).getReceptionistId();
             return "Receptionist";
         }
         if (GuestController.getInstance().checkUserExists(username, password)) {
+        	this.currentUserId = GuestController.getInstance().getGuestByEmail(username).getGuestId();
             return "Guest";
         }
+        this.currentUserId = -1;
         return null;  // User does not exist
     }
 	
@@ -112,4 +133,16 @@ public class DataController {
         RoomTypeController roomTypeController = RoomTypeController.getInstance();
         roomTypeController.displayAllRoomTypes();
     }
+	
+	public void printAllRooms() {
+		RoomController roomController = RoomController.getInstance();
+		roomController.displayAllRooms();
+	}
+	
+	public void printAllAdditionalServices() {
+		AdditionalServicesController additionalServicesController = AdditionalServicesController.getInstance();
+		additionalServicesController.displayAllAdditionalServices();
+	}
+	
+	
 }

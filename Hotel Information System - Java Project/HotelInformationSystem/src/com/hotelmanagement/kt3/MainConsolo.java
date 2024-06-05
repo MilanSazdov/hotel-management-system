@@ -11,6 +11,8 @@ public class MainConsolo {
         DataController dataController = DataController.getInstance();
         dataController.loadData();
         
+        
+        
         Menu menu = new Menu();
         Menu.main(args);
     }

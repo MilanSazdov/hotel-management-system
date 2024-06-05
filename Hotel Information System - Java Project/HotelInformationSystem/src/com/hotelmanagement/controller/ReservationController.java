@@ -3,6 +3,7 @@ package com.hotelmanagement.controller;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import com.hotelmanagement.model.Guest;
 import com.hotelmanagement.model.Reservation;
 import com.hotelmanagement.model.ReservationStatus;
 
@@ -71,7 +72,16 @@ public class ReservationController {
 		}
 	}
 	
-	
+	public ArrayList<Reservation> getReservationsByGuestId(int guestId) {
+	    ArrayList<Reservation> guestReservations = new ArrayList<>();
+	    for (Reservation res : allReservations) {
+	        if (res.getGuestId() == guestId) {
+	            guestReservations.add(res);
+	        }
+	    }
+	    return guestReservations;
+	}
+
 
 	public ArrayList<Reservation> getAllReservations() {
 		return allReservations;
@@ -84,4 +94,45 @@ public class ReservationController {
 			}
 		}
 	}
+	
+	public Reservation findReservationById(int reservationId) {
+	    for (Reservation res : allReservations) {
+	        if (res.getReservationId() == reservationId) {
+	            return res;
+	        }
+	    }
+	    return null;
+	}
+
+
+	public boolean cancelReservation(int reservationId) {
+	    Reservation reservation = findReservationById(reservationId);
+	    if (reservation != null && reservation.getStatus() == ReservationStatus.WAITING) {
+	        allReservations.remove(reservation);
+	        
+	        // Fetch the guest and remove the reservation from their list
+	        Guest guest = GuestController.getInstance().getGuestById(reservation.getGuestId());
+	        if (guest != null) {
+	            guest.removeReservation(reservation);
+	            System.out.println("Reservation removed from the guest's record.");
+	        } else {
+	            System.out.println("Guest not found for this reservation.");
+	        }
+	        
+	        return true; // Successfully cancelled
+	    }
+	    return false; // Not cancelled due to wrong status or reservation not found
+	}
+
+	public ArrayList<Reservation> getReservationsByStatus(ReservationStatus status) {
+	    ArrayList<Reservation> filteredReservations = new ArrayList<>();
+	    for (Reservation reservation : allReservations) {
+	        if (reservation.getStatus() == status) {
+	            filteredReservations.add(reservation);
+	        }
+	    }
+	    return filteredReservations;
+	}
+
+
 }

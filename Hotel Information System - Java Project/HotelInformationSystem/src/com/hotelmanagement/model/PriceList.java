@@ -14,9 +14,18 @@ public class PriceList {
     private LocalDate validTo;
     static private int nextPriceListId = 1;
     private int priceListId;
-    private Map<RoomType, Double> roomTypePrices;
-    private Map<AdditionalServices, Double> additionalServicePrices;
+    private Map<Integer, Double> roomTypePrices;
+    private Map<Integer, Double> additionalServicePrices;
     
+    // Constructor for PriceList from file
+    public PriceList(int id, LocalDate validFrom, LocalDate validTo, Map<Integer, Double> roomTypePrices, Map<Integer, Double> additionalServicePrices) {
+        this.priceListId = id;
+        this.validFrom = validFrom;
+        this.validTo = validTo;
+        this.roomTypePrices = roomTypePrices;
+        this.additionalServicePrices = additionalServicePrices;
+        nextPriceListId = Math.max(nextPriceListId, id + 1);
+    }
     
     public PriceList(LocalDate validFrom, LocalDate validTo) {
         this.validFrom = validFrom;
@@ -26,72 +35,24 @@ public class PriceList {
         this.additionalServicePrices = new HashMap<>();
     }
     
-    public void setPriceForRoomType(RoomType roomType, double price) {
-        roomTypePrices.put(roomType, price);
+    public void setPriceForRoomTypeId(int roomTypeId, double price) {
+        roomTypePrices.put(roomTypeId, price);
     }
 
-    public double getPriceForRoomType(RoomType roomType) {
-        return roomTypePrices.getOrDefault(roomType, 0.0);
+    public double getPriceForRoomTypeId(int roomTypeId) {
+        return roomTypePrices.getOrDefault(roomTypeId, 0.0);
     }
 
-    public void setPriceForAdditionalService(AdditionalServices service, double price) {
-        additionalServicePrices.put(service, price);
+    public void setPriceForAdditionalServiceId(int serviceId, double price) {
+        additionalServicePrices.put(serviceId, price);
     }
 
-    public double getPriceForAdditionalService(AdditionalServices service) {
-        return additionalServicePrices.getOrDefault(service, 0.0);
+    public double getPriceForAdditionalServiceId(int serviceId) {
+        return additionalServicePrices.getOrDefault(serviceId, 0.0);
     }
     
-	public void addRoomType(RoomType roomType) {
-		RoomTypeController.getInstance().addRoomType(roomType);
-	}
-	
-	public void removeRoomType(RoomType roomType) {
-		RoomTypeController.getInstance().removeRoomType(roomType);
-	}
-	
-	public void addAdditionalService(AdditionalServices additionalService) {
-		AdditionalServicesController.getInstance().addAdditionalService(additionalService);
-	}
-	
-	public void removeAdditionalService(AdditionalServices additionalService) {
-		AdditionalServicesController.getInstance().removeAdditionalService(additionalService);
-	}
-	
-	public void displayAllRoomTypes() {
-		RoomTypeController.getInstance().displayAllRoomTypes();
-	}
-	
-	public void displayAllAdditionalServices() {
-		AdditionalServicesController.getInstance().displayAllAdditionalServices();
-	}
-	
-	public void modifyRoomTypePrice(int id, double price) {
-		RoomTypeController.getInstance().modifyRoomTypePrice(id, price);
-	}
-	
-	public void modifyAdditionalSevicePrice(int id, double price) {
-		AdditionalServicesController.getInstance().modifyAdditionalSevicePrice(id, price);
-	}
-
-	public int getPriceListId() {
-		return this.priceListId;
-	}
-    
-    public ArrayList<RoomType> getRoomTypes() {
-        return RoomTypeController.getInstance().getRoomTypeList();
-    }
-
-    public void setRoomTypes(ArrayList<RoomType> roomTypes) {
-		RoomTypeController.getInstance().setRoomTypeList(roomTypes);
-    }
-
-    public ArrayList<AdditionalServices> getAdditionalServices() {
-        return AdditionalServicesController.getInstance().getAdditionalServicesList();
-    }
-
-    public void setAdditionalServices(ArrayList<AdditionalServices> additionalServices) {
-    	AdditionalServicesController.getInstance().setAdditionalServicesList(additionalServices);
+    public int getPriceListId() {
+        return this.priceListId;
     }
 
     public LocalDate getValidFrom() {
@@ -114,25 +75,34 @@ public class PriceList {
         return (date.isEqual(validFrom) || date.isAfter(validFrom)) &&
                (date.isEqual(validTo) || date.isBefore(validTo));
     }
+    
+    public String toCSVString() {
+        return String.format("%d,%s,%s,%s,%s",
+            priceListId,
+            validFrom,
+            validTo,
+            mapToString(roomTypePrices),
+            mapToString(additionalServicePrices));
+    }
+    
+    private String mapToString(Map<Integer, Double> map) {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Integer, Double> entry : map.entrySet()) {
+            sb.append(entry.getKey()).append(":").append(entry.getValue()).append(";");
+        }
+        return sb.toString();
+    }
 
-	@Override
-	public String toString() {
-	    StringBuilder sb = new StringBuilder();
-	    sb.append("PriceList ID: ").append(priceListId)
-	      .append("\nValid from: ").append(validFrom)
-	      .append("\nValid to: ").append(validTo)
-	      .append("\nRoom Types and Prices: ");
-	
-	    for (Map.Entry<RoomType, Double> entry : roomTypePrices.entrySet()) {
-	        sb.append("\n - ").append(entry.getKey().toString()).append(": ").append(entry.getValue());
-	    }
-	
-	    sb.append("\nAdditional Services and Prices: ");
-	    for (Map.Entry<AdditionalServices, Double> entry : additionalServicePrices.entrySet()) {
-	        sb.append("\n - ").append(entry.getKey().toString()).append(": ").append(entry.getValue());
-	    }
-	
-	    return sb.toString();
-	}
-
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("PriceList ID: ").append(priceListId)
+          .append("\nValid from: ").append(validFrom)
+          .append("\nValid to: ").append(validTo)
+          .append("\nRoom Types and Prices: ");
+        roomTypePrices.forEach((id, price) -> sb.append("\n - ID: ").append(id).append(", Price: ").append(price));
+        sb.append("\nAdditional Services and Prices: ");
+        additionalServicePrices.forEach((id, price) -> sb.append("\n - ID: ").append(id).append(", Price: ").append(price));
+        return sb.toString();
+    }
 }

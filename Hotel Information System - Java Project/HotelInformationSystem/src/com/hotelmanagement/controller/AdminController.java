@@ -30,6 +30,16 @@ public class AdminController {
 		return instance;
 	}
 	
+	public Admin getAdminByUsername(String username) {
+	    for (Admin admin : adminList) {
+	        if (admin.getUsername().equals(username)) {
+	            return admin;
+	        }
+	    }
+	    return null; // Vraća null ako admin sa datim korisničkim imenom nije pronađen
+	}
+
+	
 	public void addAdmin(Admin admin) {
 		adminList.add(admin);
     }

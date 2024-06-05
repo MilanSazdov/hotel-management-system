@@ -41,7 +41,7 @@ public class Menu {
                     // MaidMenu.show();
                     break;
                 case "Receptionist":
-                    // ReceptionistMenu.show();
+                    ReceptionistMenu.show();
                     break;
                 case "Guest":
                     GuestMenu.show();

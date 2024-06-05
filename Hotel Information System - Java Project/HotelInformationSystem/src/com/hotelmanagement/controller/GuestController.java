@@ -70,9 +70,25 @@ public class GuestController {
 	    }
 	    return ids;
 	}
+	
+	public Guest getGuestById(int id) {
+		for (Guest guest : guestList) {
+			if (guest.getGuestId() == id) {
+				return guest;
+			}
+		}
+		return null; // Returns null if no guest with the given ID is found
+	}
+	
 
-
-
+	public Guest getGuestByEmail(String email) {
+	    for (Guest guest : guestList) {
+	        if (guest.getEmail().equals(email)) {
+	            return guest;
+	        }
+	    }
+	    return null; // Returns null if no guest with the given email is found
+	}
 
 	public void saveGuestsToFile() {
 	    String path = "src/com/hotelmanagement/data/guests.csv";

@@ -35,6 +35,15 @@ public class ReceptionistController {
         return instance;
     }
     
+    public Receptionist getReceptionistByUsername(String username) {
+        for (Receptionist receptionist : receptionistList) {
+            if (receptionist.getUsername().equals(username)) {
+                return receptionist;
+            }
+        }
+        return null; // Returns null if no receptionist with the given username is found
+    }
+    
     public void loadReceptionistsFromFile() {
         receptionistList.clear();
         String path = "src/com/hotelmanagement/data/receptionists.csv";

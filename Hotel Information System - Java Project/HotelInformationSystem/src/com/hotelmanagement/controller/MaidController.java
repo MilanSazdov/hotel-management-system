@@ -83,6 +83,15 @@ public class MaidController {
             e.printStackTrace();
         }
     }
+    
+    public Maid getMaidByUsername(String username) {
+        for (Maid maid : maidList) {
+            if (maid.getUsername().equals(username)) {
+                return maid;
+            }
+        }
+        return null; // Returns null if no maid with the given username is found
+    }
 
 
     public void addMaid(Maid maid) {
