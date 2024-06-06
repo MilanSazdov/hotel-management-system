@@ -164,6 +164,10 @@ public class ReceptionistMenu {
 
         reservation.setRoom(room);
         room.setStatus(RoomStatus.OCCUPIED);
+        
+        // Add check-in and check-out dates to the room
+        room.addCheckInDate(reservation.getCheckInDate());
+        room.addCheckOutDate(reservation.getCheckOutDate());
 
         ArrayList<AdditionalServices> newServices = new ArrayList<>(reservation.getAdditionalServices()); // Copy existing services
         AdditionalServicesController.getInstance().getAdditionalServicesList().stream()

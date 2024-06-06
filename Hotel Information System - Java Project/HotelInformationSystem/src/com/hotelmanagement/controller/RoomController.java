@@ -20,7 +20,6 @@ public class RoomController {
 
 	private RoomController() {
 		roomList = new ArrayList<>();
-		loadRoomsFromFile();
 	}
 
 	public static synchronized RoomController getInstance() {
