@@ -1,15 +1,18 @@
 package com.hotelmanagement.kt3;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import com.hotelmanagement.controller.AdditionalServicesController;
 import com.hotelmanagement.controller.GuestController;
+import com.hotelmanagement.controller.MaidController;
 import com.hotelmanagement.controller.ReservationController;
 import com.hotelmanagement.controller.RoomController;
 import com.hotelmanagement.model.AdditionalServices;
 import com.hotelmanagement.model.Guest;
+import com.hotelmanagement.model.Maid;
 import com.hotelmanagement.model.Reservation;
 import com.hotelmanagement.model.ReservationStatus;
 import com.hotelmanagement.model.Room;
@@ -42,14 +45,14 @@ public class ReceptionistMenu {
                     checkInGuest();
                     break;
                 case 3:
-                     // checkOutGuest();
+                    checkOutGuest();
                     break;
                 case 4:
                     confirmReservations(scanner);
                     break;
                 case 5:
                     System.out.println("Logging out...");
-                    return; // Logout and exit the menu loop
+                    return;
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
@@ -190,9 +193,61 @@ public class ReceptionistMenu {
         reservation.setAdditionalServices(newServices);
         System.out.println("Check-in completed for " + guest.getName() + " in Room: " + room.getRoomNumber());
         ReservationController.getInstance().updateReservation(reservation);
+        reservation.setStatus(ReservationStatus.CHECKED_IN);
     }
 
 
+    private static void checkOutGuest() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the guest's email for check-out:");
+        String guestEmail = scanner.nextLine();
+
+        Guest guest = GuestController.getInstance().getGuestByEmail(guestEmail);
+        if (guest == null) {
+            System.out.println("No guest found with that email.");
+            return;
+        }
+
+        Reservation activeReservation = guest.getReservations().stream()
+            .filter(res -> res.getStatus() == ReservationStatus.CHECKED_IN)
+            .findFirst()
+            .orElse(null);
+
+        if (activeReservation == null) {
+            System.out.println("No active reservation found for check-out.");
+            return;
+        }
+
+        Room room = activeReservation.getRoom();
+        if (room == null) {
+            System.out.println("No room associated with this reservation.");
+            return;
+        }
+
+        // Update the reservation status to CHECKED_OUT
+        activeReservation.setStatus(ReservationStatus.CHECKED_OUT);
+        ReservationController.getInstance().updateReservation(activeReservation); // Persist changes
+
+        // Update room status to CLEANING
+        room.setStatus(RoomStatus.CLEANING_PROCESS);
+        RoomController.getInstance().updateRoomAttributes(room);
+
+        // Assign the room to the maid with the least number of assigned rooms
+        Maid assignedMaid = MaidController.getInstance().getMaidList().stream()
+            .min(Comparator.comparingInt(maid -> maid.getRoomsId().size()))
+            .orElse(null);
+
+        if (assignedMaid != null) {
+            assignedMaid.addRoomId(room.getRoomId());
+            System.out.println(assignedMaid.getRoomsId());
+            MaidController.getInstance().updateMaid(assignedMaid);
+            System.out.println("Room " + room.getRoomNumber() + " assigned to Maid " + assignedMaid.getName() + " for cleaning.");
+        } else {
+            System.out.println("No maid available to assign for cleaning.");
+        }
+
+        System.out.println("Check-out completed for " + guest.getName() + ".");
+    }
 
 
 

@@ -20,6 +20,7 @@ public class RoomController {
 
 	private RoomController() {
 		roomList = new ArrayList<>();
+		loadRoomsFromFile();
 	}
 
 	public static synchronized RoomController getInstance() {
@@ -179,5 +180,23 @@ public class RoomController {
         return new ArrayList<>(roomList); // Return a copy of the rooms list to prevent external modifications
     }
 
-
+ // Method to update the status of a room
+    public void updateRoomStatus(int roomId, RoomStatus newStatus) {
+        Room room = findRoomById(roomId);
+        if (room != null) {
+            room.setStatus(newStatus);
+            System.out.println("Room " + roomId + " status updated to " + newStatus);
+        } else {
+            System.out.println("Room with ID " + roomId + " not found.");
+        }
+    }
+    
+    public void updateRoomAttributes(Room updatedRoom) {
+        for (Room room : roomList) {
+            if (room.getRoomId() == updatedRoom.getRoomId()) {
+                room.setStatus(updatedRoom.getStatus());
+                break;
+            }
+        }
+    }
 }

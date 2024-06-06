@@ -38,7 +38,7 @@ public class Menu {
                     // AdminMenu.show();
                     break;
                 case "Maid":
-                    // MaidMenu.show();
+                    MaidMenu.show();
                     break;
                 case "Receptionist":
                     ReceptionistMenu.show();

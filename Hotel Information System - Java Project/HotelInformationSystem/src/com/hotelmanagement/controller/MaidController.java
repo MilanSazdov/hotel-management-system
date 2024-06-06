@@ -1,6 +1,8 @@
 package com.hotelmanagement.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import com.hotelmanagement.model.Maid;
 import com.hotelmanagement.model.Gender;
@@ -35,52 +37,78 @@ public class MaidController {
     public void loadMaidsFromFile() {
         maidList.clear();
         String path = "src/com/hotelmanagement/data/maids.csv";
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(path))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
-                Maid maid = new Maid(
-                    Integer.parseInt(values[0]),  // ID from the file
-                    values[1],  // Name
-                    values[2],  // Last Name
-                    Gender.valueOf(values[3]),  // Gender
-                    LocalDate.parse(values[4]),  // Birthdate
-                    values[5],  // Phone Number
-                    values[6],  // Username
-                    values[7],  // Password
-                    Integer.parseInt(values[8]),  // Working Experience
-                    Double.parseDouble(values[9]),  // Salary
-                    ProfessionalQualification.valueOf(values[10])  // Qualification
-                );
+                if (values.length < 11) {
+                    System.out.println("Skipping incomplete record: " + Arrays.toString(values));
+                    continue;
+                }
+                int maidId = Integer.parseInt(values[0]);
+                String name = values[1];
+                String lastName = values[2];
+                Gender gender = Gender.valueOf(values[3]);
+                LocalDate birthDate = LocalDate.parse(values[4]);
+                String phoneNumber = values[5];
+                String username = values[6];
+                String password = values[7];
+                int workingExperience = Integer.parseInt(values[8]);
+                double salary = Double.parseDouble(values[9]);
+                ProfessionalQualification qualification = ProfessionalQualification.valueOf(values[10]);
+
+                ArrayList<Integer> roomsId = new ArrayList<>();
+                if (values.length > 11 && !values[11].isEmpty()) {
+                    String[] roomIds = values[11].split(";");
+                    for (String id : roomIds) {
+                        roomsId.add(Integer.parseInt(id.trim()));
+                    }
+                }
+
+                Maid maid = new Maid(maidId, name, lastName, gender, birthDate, phoneNumber, username, password, workingExperience, salary, qualification, roomsId);
                 maidList.add(maid);
             }
+            System.out.println("Maids loaded successfully.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error reading from file: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Error parsing number from file: " + e.getMessage());
         }
     }
 
-
+    private ArrayList<Integer> parseRoomIds(String data) {
+        if (data == null || data.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return Arrays.stream(data.split(";"))
+                     .map(Integer::parseInt)
+                     .collect(Collectors.toCollection(ArrayList::new));
+    }
 
     public void saveMaidsToFile() {
         String path = "src/com/hotelmanagement/data/maids.csv";
         try (BufferedWriter bw = Files.newBufferedWriter(Paths.get(path))) {
             for (Maid maid : maidList) {
-                bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%d,%f,%s\n",
-                    maid.getMaidId(),
-                    maid.getName(),
-                    maid.getLastName(),
-                    maid.getGender(),
-                    maid.getBirthDate(),
-                    maid.getPhoneNumber(),
-                    maid.getUsername(),
-                    maid.getPassword(),
-                    maid.getWorkingExperience(),
-                    maid.getSalary(),
-                    maid.getProfessionalQualification()
-                ));
+                String roomsId = maid.getRoomsId().stream()
+                                     .map(Object::toString)
+                                     .collect(Collectors.joining(";"));
+                bw.write(String.format("%d,%s,%s,%s,%s,%s,%s,%s,%d,%f,%s,%s\n",
+                                       maid.getMaidId(),
+                                       maid.getName(),
+                                       maid.getLastName(),
+                                       maid.getGender().toString(),
+                                       maid.getBirthDate().toString(),
+                                       maid.getPhoneNumber(),
+                                       maid.getUsername(),
+                                       maid.getPassword(),
+                                       maid.getWorkingExperience(),
+                                       maid.getSalary(),
+                                       maid.getProfessionalQualification().toString(),
+                                       roomsId));
             }
+            System.out.println("Maids saved successfully.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Error writing to file: " + e.getMessage());
         }
     }
     
@@ -175,5 +203,24 @@ public class MaidController {
 	
 	public ArrayList<Maid> getAllMaids() {
         return new ArrayList<>(maidList); // Return a copy of the list to avoid external modifications
+    }
+	
+	public Maid getMaidById(int id) {
+		for (Maid maid : maidList) {
+			if (maid.getMaidId() == id) {
+				return maid;
+			}
+		}
+		return null;
+	}
+	
+	public void updateMaid(Maid maid) {
+        for (int i = 0; i < maidList.size(); i++) {
+            if (maidList.get(i).getMaidId() == maid.getMaidId()) {
+                maidList.set(i, maid);
+                saveMaidsToFile();
+                break;
+            }
+        }
     }
 }
