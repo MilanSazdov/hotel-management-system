@@ -2,6 +2,7 @@ package com.hotelmanagement.controller;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import com.hotelmanagement.model.Guest;
 import com.hotelmanagement.model.Reservation;
@@ -107,22 +108,13 @@ public class ReservationController {
 
 	public boolean cancelReservation(int reservationId) {
 	    Reservation reservation = findReservationById(reservationId);
-	    if (reservation != null && reservation.getStatus() == ReservationStatus.WAITING) {
-	        allReservations.remove(reservation);
-	        
-	        // Fetch the guest and remove the reservation from their list
-	        Guest guest = GuestController.getInstance().getGuestById(reservation.getGuestId());
-	        if (guest != null) {
-	            guest.removeReservation(reservation);
-	            System.out.println("Reservation removed from the guest's record.");
-	        } else {
-	            System.out.println("Guest not found for this reservation.");
-	        }
-	        
-	        return true; // Successfully cancelled
+	    if (reservation != null && reservation.getStatus().equals(ReservationStatus.WAITING)) {
+	        reservation.setStatus(ReservationStatus.CANCELLED);
+	        return true; // Successfully updated the status to REJECTED
 	    }
-	    return false; // Not cancelled due to wrong status or reservation not found
+	    return false; // Not cancelled due to invalid status or reservation not found
 	}
+
 
 	public ArrayList<Reservation> getReservationsByStatus(ReservationStatus status) {
 	    ArrayList<Reservation> filteredReservations = new ArrayList<>();
@@ -156,6 +148,13 @@ public class ReservationController {
 	        }
 	    }
 	}
+	
+	public ArrayList<Reservation> getReservationsInDateRange(LocalDate startDate, LocalDate endDate) {
+	    return allReservations.stream()
+	        .filter(res -> !res.getCheckInDate().isBefore(startDate) && !res.getCheckOutDate().isAfter(endDate))
+	        .collect(Collectors.toCollection(ArrayList::new));
+	}
+
 
 
 }

@@ -1,5 +1,6 @@
 package com.hotelmanagement.kt3;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
@@ -11,6 +12,7 @@ import com.hotelmanagement.controller.MaidController;
 import com.hotelmanagement.controller.ReservationController;
 import com.hotelmanagement.controller.RoomController;
 import com.hotelmanagement.model.AdditionalServices;
+import com.hotelmanagement.model.Gender;
 import com.hotelmanagement.model.Guest;
 import com.hotelmanagement.model.Maid;
 import com.hotelmanagement.model.Reservation;
@@ -31,7 +33,9 @@ public class ReceptionistMenu {
             System.out.println("2. Check-in guest");
             System.out.println("3. Check-out guest");
             System.out.println("4. Confirm reservations");
-            System.out.println("5. Logout");
+            System.out.println("5. Register a new guest");
+            System.out.println("6. View daily hotel activities");
+            System.out.println("7. Logout");
 
             System.out.print("Enter your choice: ");
             option = scanner.nextInt();
@@ -51,6 +55,12 @@ public class ReceptionistMenu {
                     confirmReservations(scanner);
                     break;
                 case 5:
+					registerGuest();
+					break;
+                case 6:
+                    displayDailyActivities(scanner);
+                    break;
+                case 7:
                     System.out.println("Logging out...");
                     return;
                 default:
@@ -58,8 +68,90 @@ public class ReceptionistMenu {
             }
         } while (option != 5);
 
-        scanner.close();
+        // scanner.close();
     }
+    
+    
+    private static void displayDailyActivities(Scanner scanner) {
+        System.out.println("Enter the date for daily activities (YYYY-MM-DD):");
+        String inputDate = scanner.nextLine();
+        LocalDate selectedDate = LocalDate.parse(inputDate);
+
+        ArrayList<Reservation> reservations = ReservationController.getInstance().getAllReservations();
+        ArrayList<Reservation> arrivals = new ArrayList<>();
+        ArrayList<Reservation> departures = new ArrayList<>();
+        int occupiedRooms = 0;
+
+        for (Reservation res : reservations) {
+            if (res.getCheckInDate().isEqual(selectedDate)) {
+                arrivals.add(res);
+            }
+            if (res.getCheckOutDate().isEqual(selectedDate)) {
+                departures.add(res);
+            }
+            if (!res.getCheckOutDate().isBefore(selectedDate) && !res.getCheckInDate().isAfter(selectedDate)) {
+                occupiedRooms++;
+            }
+        }
+
+        int totalRooms = RoomController.getInstance().getAllRooms().size();
+
+        System.out.println("\nDaily Hotel Activities for " + selectedDate + ":");
+        System.out.println("Arrivals:");
+        for (Reservation arrival : arrivals) {
+            System.out.println("Reservation ID: " + arrival.getReservationId() + ", Guest Name: " + GuestController.getInstance().getGuestById(arrival.getGuestId()).getName());
+        }
+
+        System.out.println("Departures:");
+        for (Reservation departure : departures) {
+            System.out.println("Reservation ID: " + departure.getReservationId() + ", Guest Name: " + GuestController.getInstance().getGuestById(departure.getGuestId()).getName());
+        }
+
+        System.out.println("Current Occupancy: " + occupiedRooms + "/" + totalRooms);
+    }
+    
+    
+    private static void registerGuest() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Register a new guest.");
+        
+        System.out.print("Enter first name: ");
+        String firstName = scanner.nextLine();
+        
+        System.out.print("Enter last name: ");
+        String lastName = scanner.nextLine();
+        
+        System.out.print("Enter gender (MALE, FEMALE, OTHER): ");
+        String gender = scanner.nextLine();
+        
+        System.out.print("Enter date of birth (YYYY-MM-DD): ");
+        String dob = scanner.nextLine();
+        LocalDate dateOfBirth = LocalDate.parse(dob);
+        
+        System.out.print("Enter phone number: ");
+        String phoneNumber = scanner.nextLine();
+        
+        
+        System.out.print("Enter email (to be used as username): ");
+        String email = scanner.nextLine();
+        
+        System.out.print("Enter passport number (to be used as password): ");
+        String passportNumber = scanner.nextLine();
+
+        
+        Guest newGuest = new Guest(firstName, lastName, Gender.valueOf(gender.toUpperCase()), dateOfBirth, phoneNumber, email, passportNumber);
+       
+        GuestController.getInstance().addGuest(newGuest);
+        
+        int nextId = GuestController.getInstance().getNextId();
+        
+        newGuest.setGuestId(nextId);
+        GuestController.getInstance().appendGuestToFile(newGuest);
+
+        
+        System.out.println("Guest registered successfully. Username: " + email + ", Password: " + passportNumber);
+    }
+
 
     private static void displayAllReservations() {
         System.out.println("All reservations in the system:");
@@ -147,6 +239,7 @@ public class ReceptionistMenu {
 
         if (availableRooms.isEmpty()) {
             System.out.println("No available rooms of the requested type: " + reservation.getRoomType().getCategory() + " for the selected period.");
+            reservation.setStatus(ReservationStatus.REJECTED);
             return;
         }
 

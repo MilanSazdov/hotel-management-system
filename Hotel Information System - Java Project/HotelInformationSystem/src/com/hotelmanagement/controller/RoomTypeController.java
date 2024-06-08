@@ -17,7 +17,6 @@ public class RoomTypeController {
     
     private RoomTypeController() {
         roomTypeList = new ArrayList<>();
-        loadRoomTypesFromFile();
     }
     
     public static synchronized RoomTypeController getInstance() {

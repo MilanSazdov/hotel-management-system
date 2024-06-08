@@ -239,15 +239,15 @@ public class GuestMenu {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the reservation ID to cancel:");
         int reservationId = scanner.nextInt();
-        scanner.nextLine();
+        scanner.nextLine();  // Consume the newline
 
-        
         boolean isCancelled = ReservationController.getInstance().cancelReservation(reservationId);
         if (isCancelled) {
-            System.out.println("Reservation cancelled successfully.");
+            System.out.println("Reservation status changed to CANCELLED successfully.");
         } else {
-            System.out.println("Failed to cancel reservation. It may not exist, be already completed, or not in a cancellable state.");
+            System.out.println("Failed to change reservation status. It may not exist, be already completed, or not in a cancellable state.");
         }
     }
+
 
 }

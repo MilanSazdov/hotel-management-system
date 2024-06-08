@@ -19,7 +19,6 @@ public class PriceListController {
 	
 	private PriceListController() {
 		allPriceList = new ArrayList<>();
-		loadPriceListsFromFile();
 	}
 	
 	public static synchronized PriceListController getInstance() {
@@ -122,16 +121,30 @@ public class PriceListController {
 	}
 
 
-    public void savePriceListsToFile(String filePath) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
-            for (PriceList priceList : allPriceList) {
-                bw.write(priceList.toCSVString());
-                bw.newLine();
+	public void savePriceListsToFile(String filePath) {
+	    try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, false))) { // false to overwrite the file
+	        for (PriceList priceList : allPriceList) {
+	            bw.write(priceList.toCSVString());
+	            bw.newLine();
+	        }
+	        System.out.println("Price lists saved successfully.");
+	    } catch (IOException e) {
+	        System.out.println("Error writing to file: " + e.getMessage());
+	    }
+	}
+
+
+
+    
+    // Check if a date range overlaps with any existing price list
+    public boolean isDateRangeOverlapping(LocalDate newStart, LocalDate newEnd) {
+        for (PriceList existingPriceList : allPriceList) {
+            if (existingPriceList.getValidFrom().isBefore(newEnd) && existingPriceList.getValidTo().isAfter(newStart)) {
+                return true; // There is an overlap
             }
-            System.out.println("Price lists saved successfully.");
-        } catch (IOException e) {
-            System.out.println("Error writing to file: " + e.getMessage());
         }
+        return false; // No overlap found
     }
+
 	
 }

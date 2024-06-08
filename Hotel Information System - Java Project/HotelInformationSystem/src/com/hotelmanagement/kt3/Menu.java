@@ -35,7 +35,7 @@ public class Menu {
             System.out.println("Login successful. Welcome, " + role + "!");
             switch (role) {
                 case "Admin":
-                    // AdminMenu.show();
+                    AdminMenu.show();
                     break;
                 case "Maid":
                     MaidMenu.show();

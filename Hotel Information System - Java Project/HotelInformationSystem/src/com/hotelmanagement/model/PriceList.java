@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.hotelmanagement.controller.AdditionalServicesController;
 import com.hotelmanagement.controller.RoomTypeController;
@@ -77,21 +78,20 @@ public class PriceList {
     }
     
     public String toCSVString() {
-        return String.format("%d,%s,%s,%s,%s",
+        return String.format("%d,%s,%s,{%s},{%s}",
             priceListId,
             validFrom,
             validTo,
             mapToString(roomTypePrices),
             mapToString(additionalServicePrices));
     }
-    
+
     private String mapToString(Map<Integer, Double> map) {
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<Integer, Double> entry : map.entrySet()) {
-            sb.append(entry.getKey()).append(":").append(entry.getValue()).append(";");
-        }
-        return sb.toString();
+        return map.entrySet().stream()
+                  .map(entry -> entry.getKey() + ":" + entry.getValue())
+                  .collect(Collectors.joining(";"));
     }
+
 
     @Override
     public String toString() {

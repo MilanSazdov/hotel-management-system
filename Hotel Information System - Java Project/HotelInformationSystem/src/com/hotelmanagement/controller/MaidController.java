@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.hotelmanagement.model.Maid;
 import com.hotelmanagement.model.Gender;
 import com.hotelmanagement.model.ProfessionalQualification;
+import com.hotelmanagement.model.Receptionist;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -23,7 +24,6 @@ public class MaidController {
 
     private MaidController() {
         maidList = new ArrayList<>();
-        loadMaidsFromFile();
     }
     
     public static synchronized MaidController getInstance() {
@@ -89,10 +89,13 @@ public class MaidController {
         String path = "src/com/hotelmanagement/data/maids.csv";
         try (BufferedWriter bw = Files.newBufferedWriter(Paths.get(path))) {
             for (Maid maid : maidList) {
-                String roomsId = maid.getRoomsId().stream()
+                // Convert room IDs list to semicolon-separated string
+                String roomsId = maid.getRoomsId().isEmpty() ? "" : maid.getRoomsId().stream()
                                      .map(Object::toString)
                                      .collect(Collectors.joining(";"));
-                bw.write(String.format("%d,%s,%s,%s,%s,%s,%s,%s,%d,%f,%s,%s\n",
+
+                // Write formatted string to file
+                bw.write(String.format("%d,%s,%s,%s,%s,%s,%s,%s,%d,%.2f,%s,%s\n",
                                        maid.getMaidId(),
                                        maid.getName(),
                                        maid.getLastName(),
@@ -106,11 +109,13 @@ public class MaidController {
                                        maid.getProfessionalQualification().toString(),
                                        roomsId));
             }
+            bw.flush();  // Ensure all data is written to the file
             System.out.println("Maids saved successfully.");
         } catch (IOException e) {
             System.out.println("Error writing to file: " + e.getMessage());
         }
     }
+
     
     public Maid getMaidByUsername(String username) {
         for (Maid maid : maidList) {
@@ -223,4 +228,21 @@ public class MaidController {
             }
         }
     }
+	
+	public Maid getMaidByRoomId(int roomId) {
+		for (Maid maid : maidList) {
+			if (maid.getRoomsId().contains(roomId)) {
+				return maid;
+			}
+		}
+		return null;
+	}
+	
+	public int getNextId() {
+		int maxId = 0;
+		for (Maid maid : maidList) {
+			maxId = Math.max(maxId, maid.getMaidId());
+		}
+		return maxId + 1;
+	}
 }

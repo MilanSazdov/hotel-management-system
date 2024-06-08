@@ -23,6 +23,14 @@ public class GuestController {
 		loadGuestsFromFile();
 	}
 	
+	public int getNextId() {
+        int maxId = 0;
+        for (Guest guest : guestList) {
+            maxId = Math.max(maxId, guest.getGuestId());
+        }
+        return maxId + 1;
+    }
+	
 	public void loadGuestsFromFile() {
 	    guestList.clear();
 	    String path = "src/com/hotelmanagement/data/guests.csv";
@@ -104,18 +112,47 @@ public class GuestController {
 	                guest.getPhoneNumber(),
 	                guest.getEmail(),
 	                guest.getPassportNumber(),
-	                idsString // Format the reservation IDs
+	                idsString // Formatted reservation IDs or an empty string
 	            ));
 	        }
+	        System.out.println("Guests saved successfully.");
 	    } catch (IOException e) {
-	        e.printStackTrace();
+	        System.err.println("Error writing to file: " + e.getMessage());
 	    }
 	}
 
+
 	// Helper method to format reservation IDs into a string
 	private String formatReservationIds(ArrayList<Integer> ids) {
+	    if (ids == null || ids.isEmpty()) {
+	        return "";  // Return an empty string if the list is null or empty
+	    }
 	    return "{" + String.join(", ", ids.stream().map(Object::toString).collect(Collectors.toList())) + "}";
 	}
+	
+	public void appendGuestToFile(Guest guest) {
+	    String path = "src/com/hotelmanagement/data/guests.csv";
+	    // Open the BufferedWriter in append mode by passing true as the second argument to FileWriter
+	    try (BufferedWriter bw = new BufferedWriter(new FileWriter(path, true))) {
+	        String idsString = formatReservationIds(guest.getReservationIds());
+	        bw.write(String.format("%d,%s,%s,%s,%s,%s,%s,%s,%s\n",
+	            guest.getGuestId(), // ID
+	            guest.getName(),
+	            guest.getLastName(),
+	            guest.getGender(),
+	            guest.getBirthDate(),
+	            guest.getPhoneNumber(),
+	            guest.getEmail(),
+	            guest.getPassportNumber(),
+	            idsString // Formatted reservation IDs or an empty string
+	        ));
+	        System.out.println("Guest appended successfully.");
+	    } catch (IOException e) {
+	        System.err.println("Error appending to file: " + e.getMessage());
+	    }
+	}
+
+
 
     
 	public ArrayList<Guest> getAllGuests() {

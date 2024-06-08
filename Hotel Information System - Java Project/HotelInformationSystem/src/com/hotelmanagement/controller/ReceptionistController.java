@@ -44,6 +44,23 @@ public class ReceptionistController {
         return null; // Returns null if no receptionist with the given username is found
     }
     
+	public Receptionist getReceptionistById(int id) {
+		for (Receptionist receptionist : receptionistList) {
+			if (receptionist.getReceptionistId() == id) {
+				return receptionist;
+			}
+		}
+		return null; // Returns null if no receptionist with the given ID is found
+	}
+	
+	public int getNextId() {
+		int maxId = 0;
+		for (Receptionist receptionist : receptionistList) {
+			maxId = Math.max(maxId, receptionist.getReceptionistId());
+		}
+		return maxId + 1;
+	}
+    
     public void loadReceptionistsFromFile() {
         receptionistList.clear();
         String path = "src/com/hotelmanagement/data/receptionists.csv";
@@ -76,28 +93,31 @@ public class ReceptionistController {
         String path = "src/com/hotelmanagement/data/receptionists.csv";
         try (BufferedWriter bw = Files.newBufferedWriter(Paths.get(path))) {
             for (Receptionist receptionist : receptionistList) {
-                bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%d,%f,%s\n",
-                    receptionist.getReceptionistId(),
-                    receptionist.getName(),
-                    receptionist.getLastName(),
-                    receptionist.getGender(),
-                    receptionist.getBirthDate(),
-                    receptionist.getPhoneNumber(),
-                    receptionist.getUsername(),
-                    receptionist.getPassword(),
-                    receptionist.getWorkingExperience(),
-                    receptionist.getSalary(),
-                    receptionist.getProfessionalQualification()
+                bw.write(String.format("%d,%s,%s,%s,%s,%s,%s,%s,%d,%.2f,%s\n",
+                    receptionist.getReceptionistId(),  // Integer
+                    receptionist.getName(),           // String
+                    receptionist.getLastName(),       // String
+                    receptionist.getGender(),         // Enum as String
+                    receptionist.getBirthDate(),      // LocalDate as String (formatted)
+                    receptionist.getPhoneNumber(),    // String
+                    receptionist.getUsername(),       // String
+                    receptionist.getPassword(),       // String
+                    receptionist.getWorkingExperience(), // Integer
+                    receptionist.getSalary(),          // Double (formatted to two decimal places)
+                    receptionist.getProfessionalQualification() // Enum as String
                 ));
             }
         } catch (IOException e) {
+            System.err.println("Failed to save receptionists: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
 
+
     public void addReceptionist(Receptionist receptionist) {
         receptionistList.add(receptionist);
+        saveReceptionistsToFile();
     }
 
     public void removeReceptionist(Receptionist receptionist) {
