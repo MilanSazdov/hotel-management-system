@@ -76,6 +76,61 @@ Before you begin, make sure you have the following installed and configured on y
 ### Installation Steps
 1. **Clone the Repository**:
    Open a terminal and run the following command to clone the repository:
-   ```bash
-   git clone https://github.com/your-username/hotel-management-system.git
+
+Alternatively, download the repository as a ZIP file and extract it.
+
+2. **Import the Project into IDE**:
+   - Open your IDE (e.g., IntelliJ IDEA or Eclipse).
+   - Select `File > Open` (in IntelliJ) or `Import > Existing Project` (in Eclipse).
+   - Navigate to the folder where the repository is located and open it.
+
+3. **Configure JDK and Dependencies**:
+   - Ensure JDK 17 is selected as the default SDK for the project:
+     - **In IntelliJ IDEA**: Navigate to `File > Project Structure > SDK` and select `JDK 17`.
+     - **In Eclipse**: Right-click on the project, go to `Properties > Java Build Path > Libraries`, and add `JDK 17`.
+   - Verify that the following libraries are added to the **Classpath**:
+     - `hamcrest-core-1.3-javadoc.jar`
+     - `junit-4.13.2-javadoc.jar`
+     - `xchart-3.8.8.jar`
+
+4. **Set Up Classpath**:
+   - In the IDE, add the provided `.jar` files to the project:
+     - **For IntelliJ IDEA**:
+       - Right-click on the project folder.
+       - Select `Add Framework Support > Add Library`.
+       - Locate the `.jar` files (e.g., `hamcrest-core`, `JUnit`, `xchart`) and add them.
+     - **For Eclipse**:
+       - Right-click on the project > `Build Path > Add External Archives`.
+       - Navigate to the folder containing the `.jar` files and add them.
+---
+
+### Running the Project
+
+1. Open the `Main.java` file in your IDE.
+2. Run the file:
+   - **In IntelliJ IDEA**: Right-click on `Main.java` and select `Run`.
+   - **In Eclipse**: Right-click on `Main.java` and select `Run As > Java Application`.
+3. The application will start, and you can access the Hotel Management System's features.
+
+---
+
+### Potential Issues and Troubleshooting
+
+1. **Error: `Java version not compatible`**:
+   - Ensure that JDK 17 is installed and selected as the default JDK for the project.
+
+2. **Error: `Cannot find Main class`**:
+   - Check if the `src` folder is marked as a source root in the IDE.
+
+3. **Missing Dependencies**:
+   - Ensure that all `.jar` files (`hamcrest-core`, `JUnit`, `xchart`) are properly added to the project classpath.
+
+---
+
+### Notes
+
+- The project uses **JUnit 5** for testing, so make sure to run test cases from the `test` directory if you want to validate the application functionality.
+- The **XChart Library** is used to create charts for reporting, so ensure the `xchart-3.8.8.jar` is added correctly.
+
+
 
