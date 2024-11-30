@@ -28,9 +28,33 @@
 
 ---
 
-## About
+## 📌 About
 
-The **Hotel Management System** is a comprehensive desktop application designed to simplify hotel operations, providing an intuitive interface for managing rooms, reservations, guests, and additional services.
+The **Hotel Management System** is a robust and user-friendly application designed to streamline the daily operations of a hotel. Built using Java and the Swing library, this application supports the following key functionalities:
+
+1. **User Roles**:
+   - **Administrator**: Full control over hotel operations, including employee management and financial reports.
+   - **Receptionist**: Handles reservations, guest check-ins/check-outs, and room assignments.
+   - **Housekeeper**: Manages the cleaning schedule and updates room availability status.
+   - **Guest**: Allows guests to request reservations, view booking statuses, and add services.
+
+2. **Reservation Management**:
+   - Guests can request room reservations for specific dates.
+   - Reservation statuses include "Pending," "Confirmed," "Rejected," and "Cancelled."
+   - Receptionists can approve or reject requests based on room availability.
+
+3. **Room and Service Management**:
+   - Tracks room status: Available, Occupied, or Under Cleaning.
+   - Supports additional services like breakfast, laundry, and spa, which can be added to a guest's bill.
+
+4. **Pricing and Reporting**:
+   - Dynamic pricing based on the season and room type.
+   - Generates reports on income, expenses, room usage, and housekeeping activities.
+
+This project implements Object-Oriented Programming (OOP) principles to create a scalable and maintainable solution for managing hotel operations.
+
+---
+
 
 ---
 
