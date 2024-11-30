@@ -150,4 +150,11 @@ This project is licensed under the [MIT License](./LICENSE). See the LICENSE fil
 - ❤️ [Code of Conduct](./CODE_OF_CONDUCT.md)
 - ⚖️ [MIT License](./LICENSE)
 
+---
+<a name="contact"></a>
+## 📞 Contact
+
+- 📧 Email: [milansazdov@gmail.com](mailto:milansazdov@gmail.com)
+- 💻 GitHub: [MilanSazdov](https://github.com/MilanSazdov)
+
 
