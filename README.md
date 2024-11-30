@@ -77,6 +77,9 @@ Before you begin, make sure you have the following installed and configured on y
 1. **Clone the Repository**:
    Open a terminal and run the following command to clone the repository:
 
+   ```bash
+   git clone https://github.com/MilanSazdov/hotel-management-system.git
+   
 Alternatively, download the repository as a ZIP file and extract it.
 
 2. **Import the Project into IDE**:
