@@ -57,6 +57,25 @@ This project implements Object-Oriented Programming (OOP) principles to create a
 
 ## How to Install and Run the Project
 
-1. Clone the repository:
+### Prerequisites
+Before you begin, make sure you have the following installed and configured on your system:
+1. **Java Development Kit (JDK)**:
+   - JDK 17: Required for compatibility with core application features.
+   - JDK 22: Optionally included in the setup.
+   - [Download JDK](https://www.oracle.com/java/technologies/javase-downloads.html)
+2. **JUnit 5**: Used for unit testing the application. This library is included in the project.
+3. **XChart Library**: Used for data visualization.
+4. **An Integrated Development Environment (IDE)**:
+   - Preferably **IntelliJ IDEA** or **Eclipse** for easy setup.
+   - [Download IntelliJ IDEA](https://www.jetbrains.com/idea/download/) | [Download Eclipse](https://www.eclipse.org/downloads/)
+5. **Git** (optional): For cloning the repository.
+   - [Download Git](https://git-scm.com/)
+
+---
+
+### Installation Steps
+1. **Clone the Repository**:
+   Open a terminal and run the following command to clone the repository:
    ```bash
    git clone https://github.com/your-username/hotel-management-system.git
+
