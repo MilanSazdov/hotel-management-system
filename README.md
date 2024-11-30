@@ -6,7 +6,7 @@
 
 ---
 
-## 🛠️ Technologies and Specifications
+## 🔧 Technologies and Specifications
 
 ![Java](https://img.shields.io/badge/Java-17-orange?style=flat-square&logo=java)
 ![Swing](https://img.shields.io/badge/Library-Swing-blue?style=flat-square)
