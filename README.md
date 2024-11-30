@@ -21,7 +21,7 @@
 ## 📚 Table of Contents
 
 - [About](#-about)
-- [How to Install and Run the Project](#-🛠️-how-to-install-and-run-the-project)
+- [How to Install and Run the Project](#how-to-install-and-run-the-project)
 - [How to Use the Project](#how-to-use-the-project)
 - [License](#license)
 - [Contact](#contact)
@@ -55,6 +55,7 @@ This project implements Object-Oriented Programming (OOP) principles to create a
 
 ---
 
+<a name="how-to-install-and-run-the-project"></a>
 ## 🛠️ How to Install and Run the Project
 
 ### Prerequisites
