@@ -136,5 +136,18 @@ Alternatively, download the repository as a ZIP file and extract it.
 - The project uses **JUnit 5** for testing, so make sure to run test cases from the `test` directory if you want to validate the application functionality.
 - The **XChart Library** is used to create charts for reporting, so ensure the `xchart-3.8.8.jar` is added correctly.
 
+---
+<a name="license"></a>
+## ⚖️ License
+
+This project is licensed under the [MIT License](./LICENSE). See the LICENSE file for details.
+
+---
+
+### Useful Links
+
+- 📖 [README](./README.md)
+- ❤️ [Code of Conduct](./CODE_OF_CONDUCT.md)
+- ⚖️ [MIT License](./LICENSE)
 
 
