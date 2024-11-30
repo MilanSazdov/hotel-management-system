@@ -20,7 +20,7 @@
 
 ## 📚 Table of Contents
 
-- [About](#about)
+- [About](#-about)
 - [How to Install and Run the Project](#how-to-install-and-run-the-project)
 - [How to Use the Project](#how-to-use-the-project)
 - [License](#license)
@@ -52,9 +52,6 @@ The **Hotel Management System** is a robust and user-friendly application design
    - Generates reports on income, expenses, room usage, and housekeeping activities.
 
 This project implements Object-Oriented Programming (OOP) principles to create a scalable and maintainable solution for managing hotel operations.
-
----
-
 
 ---
 
