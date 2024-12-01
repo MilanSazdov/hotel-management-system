@@ -54,35 +54,6 @@ The **Hotel Management System** is a robust and user-friendly application design
 This project implements Object-Oriented Programming (OOP) principles to create a scalable and maintainable solution for managing hotel operations.
 
 ---
-<a name="how-to-use-the-project"></a>
-## 🚀 How to Use the Project
-
-### 1. Launch the Application
-The project is initiated from the `com.hotelmanagement.main` package, specifically the `HotelManagementApp.java` class. When the application is launched, the following login screen is displayed:
-
-![Login Screen](./assets/login_screen.png)
-
-### 2. Login and Roles
-The application supports three roles:
-- **Administrator**:
-  - Manage employees, view financial reports, and oversee all hotel operations.
-  - Example screen:
-    ![Admin Dashboard](./assets/admin_dashboard.png)
-- **Receptionist**:
-  - Handle reservations, check-ins, and room assignments.
-  - Example screen:
-    ![Receptionist Dashboard](./assets/receptionist_dashboard.png)
-- **Maid**:
-  - Manage room cleaning schedules and update room statuses.
-  - Example screen:
-    ![Maid Dashboard](./assets/maid_dashboard.png)
-
-### 3. Visual Reports
-The application generates detailed visualizations, such as income reports and room occupancy statistics. Below is an example of a report generated using the XChart library:
-
-![Reports](./assets/report_graphic.png)
-
----
 
 <a name="how-to-install-and-run-the-project"></a>
 ## 🛠️ How to Install and Run the Project
@@ -166,6 +137,37 @@ Alternatively, download the repository as a ZIP file and extract it.
 - The **XChart Library** is used to create charts for reporting, so ensure the `xchart-3.8.8.jar` is added correctly.
 
 ---
+
+<a name="how-to-use-the-project"></a>
+## 🚀 How to Use the Project
+
+### 1. Launch the Application
+The project is initiated from the `com.hotelmanagement.main` package, specifically the `HotelManagementApp.java` class. When the application is launched, the following login screen is displayed:
+
+![Login Screen](./assets/login_screen.png)
+
+### 2. Login and Roles
+The application supports three roles:
+- **Administrator**:
+  - Manage employees, view financial reports, and oversee all hotel operations.
+  - Example screen:
+    ![Admin Dashboard](./assets/admin_dashboard.png)
+- **Receptionist**:
+  - Handle reservations, check-ins, and room assignments.
+  - Example screen:
+    ![Receptionist Dashboard](./assets/receptionist_dashboard.png)
+- **Maid**:
+  - Manage room cleaning schedules and update room statuses.
+  - Example screen:
+    ![Maid Dashboard](./assets/maid_dashboard.png)
+
+### 3. Visual Reports
+The application generates detailed visualizations, such as income reports and room occupancy statistics. Below is an example of a report generated using the XChart library:
+
+![Reports](./assets/report_graphic.png)
+
+---
+
 <a name="license"></a>
 ## ⚖️ License
 
