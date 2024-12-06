@@ -162,9 +162,17 @@ The application supports three roles:
     ![Maid Dashboard](./assets/maid_dashboard.png)
 
 ### 3. Visual Reports
-The application generates detailed visualizations, such as income reports and room occupancy statistics. Below is an example of a report generated using the XChart library:
+The application generates detailed visualizations, such as income reports and room occupancy statistics. Below are examples of reports generated using the XChart library:
 
-![Reports](./assets/report_graphic.png)
+#### Yearly Income Chart
+![Yearly Income Chart](./assets/slika1.png)
+
+#### Business of Maids Chart
+![Business of Maids Chart](./assets/slika2.png)
+
+#### Status of Reservations Chart
+![Status of Reservations Chart](./assets/slika3.png)
+
 
 ---
 
