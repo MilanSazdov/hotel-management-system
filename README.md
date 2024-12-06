@@ -164,7 +164,7 @@ The application supports three roles:
 ### 3. Visual Reports
 The application generates detailed visualizations, such as income reports and room occupancy statistics. Below are examples of reports generated using the XChart library:
 
-#### Yearly Income Chart
+#### Yearly Income Chart by Room Type
 ![Yearly Income Chart](./assets/total_income_chart.png)
 
 #### Business of Maids Chart
