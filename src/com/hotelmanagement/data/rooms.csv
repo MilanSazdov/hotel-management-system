@@ -1,0 +1,14 @@
+1,100,1,CLEANING_PROCESS,Single Room with One Bed,2024-07-21;2024-10-08;2024-07-05,2024-08-25;2024-10-12;2024-07-16
+2,101,1,FREE,Single Room with One Bed,,
+3,201,2,FREE,Double Room with Two Single Beds,,
+4,202,2,FREE,Double Room with Two Single Beds,,
+5,203,3,FREE,Double Room wtih one Twin Bed,,
+6,301,4,FREE,Triple Room with One Double and One Single Bed,2024-09-08;2024-07-05,2024-09-12;2024-07-09
+7,302,4,FREE,Triple Room with One Double and One Single Bed,,
+8,303,5,CLEANING_PROCESS,Triple Room with Three Single Beds,,
+9,401,6,FREE,Quad Room with Two Double Beds,2024-09-01,2024-09-12
+10,402,6,FREE,Quad Room with Two Double Beds,,
+11,403,7,FREE,Quad Room with Three Single Beds and One Extra Bed,2024-08-01;2024-07-05,2024-08-03;2024-07-10
+12,404,7,FREE,Quad Room with Three Single Beds and One Extra Bed,,
+13,501,8,CLEANING_PROCESS,Five Bed Room with Five Single Beds,2024-07-05,2024-07-14
+14,502,8,FREE,Five Bed Room with Five Single Beds,,
